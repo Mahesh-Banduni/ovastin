@@ -1,0 +1,705 @@
+@import "tailwindcss";
+
+:root {
+  /* Project theme colors */
+  --color-primary: #191500;
+  --color-secondary: #FED731;
+
+  --text-primary: #191500;
+  --text-foreground: #3b3b3b;
+  --text-secondary: #5D5D55;
+  --text-neutral: #FFFFFF;
+
+  /* Background / surface */
+  --background: #FFFFFF;
+  --surface: #FFFFFF;
+
+  /* Fonts */
+  --font-heading: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
+
+  /* Typography sizes & weights (user spec) */
+  /* Headings */
+  --h1-size: 80px;
+  --h1-line: 1.16; /* 92.8 / 80 */
+  --h1-weight: 700;
+
+  --h2-size: 50px;
+  --h2-line: 1.16; /* 58 / 50 */
+  --h2-weight: 600;
+
+  --h3-size: 36px;
+  --h3-line: 1.16; /* 41.76 / 36 */
+  --h3-weight: 600;
+
+  --h4-size: 28px;
+  --h4-line: 1.16; /* 39.2 / 28 */
+  --h4-weight: 600;
+
+  --h5-size: 24px;
+  --h5-line: 1.16; /* 31.92 / 24 */
+  --h5-weight: 700;
+
+  --h6-size: 20px;
+  --h6-line: 1.16; /* 28 / 20 */
+  --h6-weight: 600;
+
+  --hero-h-size: 64px;
+  --hero-h-size-line: 1.16;
+  --hero-h-size-weight: 700;
+
+  /* Subtitle */
+  --subtitle-size: 14px;
+  --subtitle-weight: 500;
+  --subtitle-line: 19.74px;
+
+  /* Paragraphs */
+  --p1-size: 20px;
+  --p1-weight: 400;
+  --p1-line: 1.6;
+
+  --p2-size: 18px;
+  --p2-weight: 400;
+  --p2-line: 1.6;
+
+  --p3-size: 16px;
+  --p3-weight: 200;
+  --p3-line: 1.6;
+
+  --p4-size: 14px;
+  --p4-weight: 500;
+  --p4-line: 1.41;
+
+  /* Buttons */
+  --btn-font-family: var(--font-heading);
+  --btn-primary-bg: var(--color-primary);
+  --btn-secondary-bg: var(--color-secondary);
+  --btn-primary-color: var(--text-neutral);
+  --btn-secondary-color: var(--text-primary);
+  --btn-radius-default: 99px;
+  --btn-radius-action: 16px;
+}
+
+/* ==========================================
+   TAILWIND V4 TOKENS
+========================================== */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--text-primary);
+
+  /* Brand */
+  --color-brand: var(--color-primary);
+  --color-brand-hover: color-mix(in srgb, var(--color-primary) 80%, black 20%);
+  --color-brand-bright: var(--color-secondary);
+  --color-brand-accent: color-mix(in srgb, var(--color-secondary) 20%, white 80%);
+
+  /* Feedback (defaults) */
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+
+  /* Surface */
+  --color-surface: var(--surface);
+
+  /* Text */
+  --color-text-primary: var(--text-primary);
+  --color-text-foreground: var(--text-foreground);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: #737373;
+  --color-text-neutral: var(--text-neutral);
+
+  /* Border */
+  --color-border: #e5e5e5;
+  --font-heading-token: var(--font-heading);
+  --font-body-token: var(--font-body);
+
+  --font-sans: var(--font-body);
+}
+
+/* ==========================================
+   DARK MODE
+========================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE TYPOGRAPHY
+========================================== */
+
+/* 1280px - 1535px */
+@media (max-width: 1535px) {
+  :root {
+    --h1-size: 80px;
+    --h2-size: 50px;
+    --h3-size: 36px;
+    --h4-size: 28px;
+    --h5-size: 24px;
+    --h6-size: 20px;
+    --h7-size: 18px;
+    --hero-h-size: 64px;
+  }
+}
+
+/* 1024px - 1279px */
+@media (max-width: 1279px) {
+  :root {
+    --h1-size: 64px;
+    --h2-size: 48px;
+    --h3-size: 34px;
+    --h4-size: 28px;
+    --h5-size: 24px;
+    --h6-size: 22px;
+    --h7-size: 18px;
+    --hero-h-size: 60px;
+  }
+}
+
+/* 768px - 1023px */
+@media (max-width: 1023px) {
+  :root {
+    --h1-size: 60px;
+    --h2-size: 40px;
+    --h3-size: 32px;
+    --h4-size: 26px;
+    --h5-size: 22px;
+    --h6-size: 18px;
+    --h7-size: 18px;
+    --hero-h-size: 54px;
+    /* --p1-size: 18px;
+    --p2-size: 16px;
+    --p3-size: 14px;
+    --p4-size: 14px; */
+  }
+}
+
+/* 480px - 767px */
+@media (max-width: 767px) {
+  :root {
+    --h1-size: 48px;
+    --h2-size: 36px;
+    --h3-size: 32px;
+    --h4-size: 24px;
+    --h5-size: 20px;
+    --h6-size: 17px;
+    --h7-size: 16px;
+    --hero-h-size: 48px;
+  }
+}
+
+/* 0px - 479px */
+@media (max-width: 479px) {
+  :root {
+    --h1-size: 40px;
+    --h2-size: 32px;
+    --h3-size: 28px;
+    --h4-size: 22px;
+    --h5-size: 18px;
+    --h6-size: 16px;
+    --h7-size: 16px;
+    --hero-h-size: 40px;
+    /* --p1-size: 16px;
+    --p2-size: 14px;
+    --p3-size: 13px;
+    --p4-size: 14px; */
+  }
+}
+
+/* ==========================================
+   GLOBAL ELEMENT STYLES
+========================================== */
+
+.body, body {
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--p2-size);
+  line-height: var(--p2-line);
+}
+
+/* ==========================================
+   HEADINGS
+========================================== */
+
+h1,
+.h1 {
+  font-family: var(--font-heading);
+  font-size: var(--h1-size);
+  font-weight: var(--h1-weight);
+  line-height: var(--h1-line);
+}
+
+h2,
+.h2 {
+  font-family: var(--font-heading);
+  font-size: var(--h2-size);
+  font-weight: var(--h2-weight);
+  line-height: var(--h2-line);
+}
+
+h3,
+.h3 {
+  font-family: var(--font-heading);
+  font-size: var(--h3-size);
+  font-weight: var(--h3-weight);
+  line-height: var(--h3-line);
+}
+
+h4,
+.h4 {
+  font-family: var(--font-heading);
+  font-size: var(--h4-size);
+  font-weight: var(--h4-weight);
+  line-height: var(--h4-line);
+}
+
+h5,
+.h5 {
+  font-family: var(--font-heading);
+  font-size: var(--h5-size);
+  font-weight: var(--h5-weight);
+  line-height: var(--h5-line);
+}
+
+h6,
+.h6 {
+  font-family: var(--font-heading);
+  font-size: var(--h6-size);
+  font-weight: var(--h6-weight);
+  line-height: var(--h6-line);
+}
+
+h7,
+.h7 {
+  font-family: var(--font-heading);
+  font-size: var(--h7-size);
+  font-weight: var(--h7-weight);
+  line-height: var(--h7-line-height);
+}
+
+.hero-h {
+  font-family: var(--font-heading);
+  font-size: var(--hero-h-size);
+  font-weight: var(--hero-h-size-weight);
+  line-height: var(--hero-h-size-line);
+}
+
+/* ==========================================
+   TEXT UTILITIES
+========================================== */
+
+.para-text-lg {
+  font-size: var(--p1-size);
+  line-height: var(--p1-line);
+  font-weight: var(--p1-weight);
+  color: var(--color-text-foreground);
+}
+
+.para-text-md {
+  font-size: var(--p2-size);
+  line-height: var(--p2-line);
+  font-weight: var(--p2-weight);
+  color: var(--color-text-foreground);
+}
+
+.para-text-sm {
+  font-size: var(--p3-size);
+  line-height: var(--p3-line);
+  font-weight: var(--p3-weight);
+  color: var(--color-text-foreground);
+}
+
+.para-text-xs {
+  font-size: var(--p4-size);
+  line-height: var(--p4-line);
+  font-weight: var(--p4-weight);
+  color: var(--color-text-foreground);
+}
+
+/* ==========================================
+   BUTTON TOKENS
+========================================== */
+
+:root {
+  /* Primary / Secondary / Danger */
+
+  --btn-height-sm: 40px;
+  --btn-height-md: 48px;
+  --btn-height-lg: 56px;
+
+  --btn-padding-sm-x: 16px;
+  --btn-padding-md-x: 24px;
+  --btn-padding-lg-x: 32px;
+
+  --btn-font-sm: 14px;
+  --btn-font-md: 16px;
+  --btn-font-lg: 18px;
+
+  --btn-radius: 8px;
+}
+
+/* Desktop XL */
+@media (max-width: 1535px) {
+  :root {
+    --btn-height-sm: 40px;
+    --btn-height-md: 48px;
+    --btn-height-lg: 56px;
+  }
+}
+
+/* Laptop */
+@media (max-width: 1279px) {
+  :root {
+    --btn-height-sm: 38px;
+    --btn-height-md: 46px;
+    --btn-height-lg: 52px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
+  :root {
+    --btn-height-sm: 36px;
+    --btn-height-md: 44px;
+    --btn-height-lg: 50px;
+
+    --btn-font-sm: 13px;
+    --btn-font-md: 15px;
+    --btn-font-lg: 16px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  :root {
+    --btn-height-sm: 34px;
+    --btn-height-md: 42px;
+    --btn-height-lg: 48px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 479px) {
+  :root {
+    --btn-height-sm: 32px;
+    --btn-height-md: 40px;
+    --btn-height-lg: 44px;
+
+    --btn-padding-sm-x: 14px;
+    --btn-padding-md-x: 20px;
+    --btn-padding-lg-x: 28px;
+  }
+}
+
+/* ==========================================
+   BUTTON BASE
+========================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  font-family: var(--font-body);
+  font-weight: 600;
+
+  border-radius: var(--btn-radius);
+
+  transition: all 250ms ease;
+
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-sm {
+  height: var(--btn-height-sm);
+  padding-inline: var(--btn-padding-sm-x);
+  font-size: var(--btn-font-sm);
+}
+
+.btn-md {
+  height: var(--btn-height-md);
+  padding-inline: var(--btn-padding-md-x);
+  font-size: var(--btn-font-md);
+}
+
+.btn-lg {
+  height: var(--btn-height-lg);
+  padding-inline: var(--btn-padding-lg-x);
+  font-size: var(--btn-font-lg);
+}
+
+/* ==========================================
+   PRIMARY BUTTON
+========================================== */
+
+.btn-primary {
+  font-family: var(--btn-font-family);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 22.4px;
+  padding-block: 11px;
+  padding-inline: 28px;
+  border-radius: var(--btn-radius-default);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-color);
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  opacity: 0.95;
+}
+
+.btn-primary:active { transform: translateY(1px); }
+
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ==========================================
+   SECONDARY BUTTON
+========================================== */
+
+.btn-secondary {
+  font-family: var(--btn-font-family);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 22.4px;
+  padding-block: 11px;
+  padding-inline: 28px;
+  border-radius: var(--btn-radius-default);
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-color);
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover { opacity: 0.95; }
+
+.btn-secondary:active { transform: translateY(1px); }
+
+.btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ==========================================
+   ACTION / DANGER BUTTON
+========================================== */
+
+.btn-action,
+.btn-danger {
+  font-family: var(--btn-font-family);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 16px;
+  padding-block: 13px;
+  padding-inline: 30px;
+  border-radius: var(--btn-radius-action);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-color);
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.btn-action:hover,
+.btn-danger:hover { opacity: 0.95; }
+
+.btn-action:active,
+.btn-danger:active { transform: translateY(1px); }
+
+.btn-action:disabled,
+.btn-danger:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.container {
+  max-width: 1680px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 2vw, 3rem);
+}
+
+@media (min-width: 1750px) {
+  .container {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1751px) {
+  .container {
+    padding-inline: 0px;
+  }
+}
+
+.font-primary {
+  font-family: var(--font-heading);
+}
+
+.font-secondary {
+  font-family: var(--font-body);
+}
+
+@keyframes blurDropIn {
+  0% {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(40px);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+.blur-drop-in {
+  animation: blurDropIn 0.8s ease-in-out forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.8s ease-in-out forwards;
+}
+
+@keyframes heroImageReveal {
+  from {
+    transform: scale(1.15);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+.hero-image-reveal {
+  animation: heroImageReveal 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes category-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-category-scroll {
+  width: max-content;
+  animation: category-scroll 20s linear infinite;
+}
+
+@media (min-width: 1024px) {
+  .animate-category-scroll {
+    animation: none;
+    width: 100%;
+  }
+}
+
+.animate-video-scroll {
+  width: max-content;
+  animation: category-scroll 20s linear infinite;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.testimonial-heading {
+  animation: scaleHeading linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 100%;
+}
+
+@keyframes scaleHeading {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.5);
+  }
+}
+
+@keyframes testimonial-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-testimonial-scroll {
+  width: max-content;
+  animation: testimonial-scroll 60s linear infinite;
+}
+
+.btn-slide {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-label {
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-slide::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+
+  color: inherit;
+  font: inherit;
+}
+
+/* Trigger text animation from the group */
+.group:hover .btn-label {
+  transform: translateY(-200%);
+}
+
+.group:hover .btn-slide::after {
+  transform: translateY(0);
+}
+
+/* Icon animation */
+.button-icon {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: center;
+}
+
+.group:hover .button-icon {
+  transform: rotate(45deg);
+}
