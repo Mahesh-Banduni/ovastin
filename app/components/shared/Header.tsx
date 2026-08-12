@@ -7,7 +7,6 @@ import { useState } from "react"
 const HeaderLinks =[
     {name: 'Home', link: '/'},
     {name: 'About', link: '/about'},
-    {name: 'Projects', link: '/projects'},
     {name: 'Services', link: '/services'},
     {name: 'Contact', link: '/contact'},
 ]
