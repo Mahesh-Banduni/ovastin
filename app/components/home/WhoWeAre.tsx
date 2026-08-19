@@ -35,7 +35,7 @@ const counterList = [
 
 export default function WhoWeAre() {
     return(
-        <div className="container flex items-center justify-center relative py-15 md:py-18 lg:py-20 xl:py-25">
+        <div className="section-container flex items-center justify-center relative py-15 md:py-18 lg:py-20 xl:py-25">
             <div className="max-w-7xl flex flex-col lg:flex-row items-start justify-center gap-5 sm:gap-7.5 md:gap-10 lg:gap-13 xl:gap-17 2xl:gap-25">
                 <div className="w-full lg:max-w-xl h-full xl:max-w-3xl flex flex-col items-start justify-center gap-22 sm:gap-24 md:gap-26 lg:gap-28 xl:gap-30">
                     <div>

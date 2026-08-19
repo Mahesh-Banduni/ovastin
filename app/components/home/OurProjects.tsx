@@ -24,7 +24,7 @@ export default function OurProjects() {
   }
 
   return (
-    <div className="container py-15 md:py-18 lg:py-20 xl:py-25">
+    <div className="section-container py-15 md:py-18 lg:py-20 xl:py-25">
       <div className="space-y-9 md:space-y-12 lg:space-y-15">
         <div className="flex flex-col items-center">
           <Subtitle text="Our Projects" />

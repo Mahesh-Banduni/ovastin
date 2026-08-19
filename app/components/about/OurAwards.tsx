@@ -49,7 +49,7 @@ const awardsList = [
 
 export default function OurAwards(){
     return(
-        <div className="container py-15 md:py-18 lg:py-20 xl:py-25 flex flex-col lg:flex-row items-center justify-center gap-8 sm:gap-10 md:gap-12 lg:gap-15">
+        <div className="section-container py-15 md:py-18 lg:py-20 xl:py-25 flex flex-col lg:flex-row items-center justify-center gap-8 sm:gap-10 md:gap-12 lg:gap-15">
             <div className="mb-9 md:mb-12 lg:mb-15 max-w-xl">
                 <div className="flex flex-col items-start w-full">
                   <Subtitle text="Our Awards" />
