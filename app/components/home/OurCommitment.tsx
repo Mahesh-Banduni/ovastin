@@ -19,17 +19,17 @@ export default function OurCommitment(){
                   <Button variant="secondary" text="Know More" />
                 </div>
                 <div className="flex flex-col lg:flex-row relative w-full gap-7">
-                    <div className="relative overflow-hidden w-full lg:min-w-[550px] xl:min-w-[750px] 2xl:min-w-[1049px] min-h-[300px] max-[400px]:min-h-[340px] sm:min-h-[400px] md:min-h-[550px] lg:min-h-[672px]">
+                    <div className="relative overflow-hidden w-full lg:min-w-[550px] xl:min-w-[750px] 2xl:min-w-[900px] min-h-[300px] max-[400px]:min-h-[340px] sm:min-h-[400px] md:min-h-[550px] lg:min-h-[672px]">
                         <Image src="/images/home/commitment-bg.webp" alt="Section Image" fill className="object-cover hero-image-reveal" />
                     </div>
                     <div className="p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-15 flex flex-col gap-6 md:gap-8 lg:gap-10 bg-white">
                         {commitmentList.map((item, index)=>(
-                            <div key={index} className="flex flex-col gap-2 sm:gap-3 lg:gap-1 items-start">
+                            <div key={index} className="flex flex-col gap-2 sm:gap-3 lg:gap-2 items-start">
                                 <div className="flex flex-row gap-5 md:gap-7 items-center justify-center">
                                     <Image src={item.icon} alt={`Item ${index}`} width={48} height={48} className="object-cover w-[32px] h-[32px] md:w-[38px] md:h-[38px] lg:w-[48px] lg:h-[48px]" />
                                     <h4 className="pt-1">{item.title}</h4>
                                 </div>
-                                <div className="flex pl-13 sm:pl-13 md:pl-17 lg:pl-20 xl:pl-18">
+                                <div className="flex pl-13 sm:pl-13 md:pl-17 lg:pl-19 xl:pl-19">
                                     <p className="para-text-md text-text-primary!">{item.description}</p>
                                 </div>
                             </div>
