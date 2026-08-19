@@ -83,7 +83,7 @@ export default function Testimonials() {
   return (
     <div className="py-15 md:py-18 lg:py-20 xl:py-25">
       <div className="space-y-9 md:space-y-12 lg:space-y-15">
-        <div className="container flex flex-col items-center">
+        <div className="section-container flex flex-col items-center">
           <Subtitle text="Testimonials" />
           <h2 className="mt-2 mb-5 text-center">Trusted by homeowners & investors</h2>
           <p className="para-text-sm text-center">

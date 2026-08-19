@@ -32,7 +32,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <div className="container flex flex-col lg:flex-row gap-3 w-full h-auto lg:min-h-[700px]">
+    <div className="section-container flex flex-col lg:flex-row gap-3 w-full h-auto lg:min-h-[700px]">
       <div className="bg-[#f6f3ec] w-full lg:w-1/2 p-[30px] md:p-[35px] lg:p-[40px] xl:p-[70px] flex flex-col items-start justify-center rounded-[16px] hero-image-reveal">
         <Subtitle text="Smart Moves Start with Us" className="mb-4" />
 

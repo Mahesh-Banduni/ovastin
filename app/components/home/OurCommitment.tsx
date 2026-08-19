@@ -12,7 +12,7 @@ const commitmentList = [
 export default function OurCommitment(){
     return(
         <div className="bg-[#f6f3ec] py-15 md:py-18 lg:py-20 xl:py-25">
-            <div className="container space-y-9 md:space-y-12 lg:space-y-15">
+            <div className="section-container space-y-9 md:space-y-12 lg:space-y-15">
                 <div className="flex flex-col lg:flex-row gap-5 sm:gap-6 md:gap-8 justify-between items-start lg:items-center">
                   <Subtitle text="Our Commitments" />
                   <h2 className="max-w-[612px]">We deliver more than promises we build with purpose and precision</h2>
@@ -24,17 +24,15 @@ export default function OurCommitment(){
                     </div>
                     <div className="p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-15 flex flex-col gap-6 md:gap-8 lg:gap-10 bg-white">
                         {commitmentList.map((item, index)=>(
-                            <>
-                                <div key={index} className="flex flex-col gap-2 sm:gap-3 lg:gap-1 items-start">
-                                    <div className="flex flex-row gap-5 md:gap-7 items-center justify-center">
-                                        <Image src={item.icon} alt={`Item ${index}`} width={48} height={48} className="object-cover w-[32px] h-[32px] md:w-[38px] md:h-[38px] lg:w-[48px] lg:h-[48px]" />
-                                        <h4 className="pt-1">{item.title}</h4>
-                                    </div>
-                                    <div className="flex pl-18 sm:pl-18 md:pl-20 lg:pl-20">
-                                        <p className="para-text-md text-text-primary!">{item.description}</p>
-                                    </div>
+                            <div key={index} className="flex flex-col gap-2 sm:gap-3 lg:gap-1 items-start">
+                                <div className="flex flex-row gap-5 md:gap-7 items-center justify-center">
+                                    <Image src={item.icon} alt={`Item ${index}`} width={48} height={48} className="object-cover w-[32px] h-[32px] md:w-[38px] md:h-[38px] lg:w-[48px] lg:h-[48px]" />
+                                    <h4 className="pt-1">{item.title}</h4>
                                 </div>
-                            </>
+                                <div className="flex pl-13 sm:pl-13 md:pl-17 lg:pl-20 xl:pl-18">
+                                    <p className="para-text-md text-text-primary!">{item.description}</p>
+                                </div>
+                            </div>
                         ))}
                     </div>
                     </div>

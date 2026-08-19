@@ -88,7 +88,7 @@ export default function Testimonial(){
     }, [totalSlides]);
 
     return(
-      <div className="container py-15 md:py-18 lg:py-20 xl:py-25 flex flex-col xl:flex-row gap-8 md:gap-10 lg:gap-15 xl:gap-40">
+      <div className="section-container py-15 md:py-18 lg:py-20 xl:py-25 flex flex-col xl:flex-row gap-8 md:gap-10 lg:gap-15 xl:gap-40">
         <div className="w-full lg:max-w-sm flex flex-col items-start justify-center rounded-[16px] hero-image-reveal">
             <Subtitle text="Testimonials" className="mb-4" />
 

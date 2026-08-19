@@ -1,0 +1,864 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ==========================================================================
+   Theme Tokens
+   ========================================================================== */
+
+@theme inline {
+  /* Fonts */
+  --font-plus-jakarta: "Plus Jakarta Sans", sans-serif;
+  --font-heading: var(--font-plus-jakarta);
+  --font-body: var(--font-plus-jakarta);
+
+  /* Core Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand */
+  --color-brand: var(--primary);
+  --color-text-brand: var(--primary);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-foreground: var(--text-foreground);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-neutral: var(--text-neutral);
+  --color-text-muted: var(--text-muted);
+
+  /* Backgrounds */
+  --color-bg-1: var(--background);
+  --color-bg-2: var(--bg-2);
+  --color-bg-3: var(--bg-3);
+  --color-bg-4: var(--bg-4);
+
+  /* Surface */
+  --color-surface: var(--surface);
+
+  /* Feedback */
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--destructive);
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Charts */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Radius */
+  --radius: 6px;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Button Radius */
+  --radius-button: 99px;
+  --radius-action: 16px;
+
+  --text-subtitle: var(--subtitle-size);
+}
+
+/* ==========================================================================
+   Light Theme
+   ========================================================================== */
+
+:root {
+  /* Core */
+  --background: #ffffff;
+  --foreground: #191500;
+
+  /* Brand */
+  --primary: #191500;
+  --primary-foreground: #ffffff;
+
+  --secondary: #fed731;
+  --secondary-foreground: #191500;
+
+  /* UI */
+  --card: #ffffff;
+  --card-foreground: #191500;
+
+  --popover: #ffffff;
+  --popover-foreground: #191500;
+
+  --muted: #f5f5f5;
+  --muted-foreground: #5d5d55;
+
+  --accent: #fff8d6;
+  --accent-foreground: #191500;
+
+  --destructive: #dc2626;
+
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #191500;
+
+  /* Project text colors */
+  --text-primary: #191500;
+  --text-foreground: #3b3b3b;
+  --text-secondary: #5d5d55;
+  --text-neutral: #ffffff;
+  --text-muted: #737373;
+
+  /* Background / surfaces */
+  --surface: #ffffff;
+
+  --bg-2: #191500;
+  --bg-3: #f5f5f5;
+  --bg-4: #fed731;
+
+  /* Feedback */
+  --success: #16a34a;
+  --warning: #f59e0b;
+
+  /* Sidebar */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #191500;
+  --sidebar-primary: #191500;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #fff8d6;
+  --sidebar-accent-foreground: #191500;
+  --sidebar-border: #e5e5e5;
+  --sidebar-ring: #191500;
+
+  /* Charts */
+  --chart-1: #191500;
+  --chart-2: #fed731;
+  --chart-3: #5d5d55;
+  --chart-4: #3b3b3b;
+  --chart-5: #737373;
+
+  /* Fonts */
+  --font-heading: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
+
+  /* ==========================================================================
+     Typography
+     ========================================================================== */
+
+  /* Subtitle */
+  --subtitle-size: 14px;
+  --subtitle-weight: 500;
+  --subtitle-line: 19.74px;
+
+  /* Buttons */
+  --btn-font-family: var(--font-heading);
+  --btn-primary-bg: var(--primary);
+  --btn-secondary-bg: var(--secondary);
+  --btn-primary-color: var(--primary-foreground);
+  --btn-secondary-color: var(--secondary-foreground);
+  --btn-radius-default: 99px;
+  --btn-radius-action: 16px;
+}
+
+/* ==========================================================================
+   Dark Theme
+   ========================================================================== */
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  --primary: #fed731;
+  --primary-foreground: #191500;
+
+  --secondary: #191500;
+  --secondary-foreground: #ffffff;
+
+  --card: #141414;
+  --card-foreground: #ededed;
+
+  --popover: #141414;
+  --popover-foreground: #ededed;
+
+  --muted: #222222;
+  --muted-foreground: #a3a3a3;
+
+  --accent: #2a2508;
+  --accent-foreground: #fed731;
+
+  --destructive: #ef4444;
+
+  --border: #2a2a2a;
+  --input: #2a2a2a;
+  --ring: #fed731;
+
+  --text-primary: #ededed;
+  --text-foreground: #d4d4d4;
+  --text-secondary: #a3a3a3;
+  --text-neutral: #ffffff;
+  --text-muted: #737373;
+
+  --surface: #141414;
+
+  --bg-2: #ffffff;
+  --bg-3: #1a1a1a;
+  --bg-4: #fed731;
+
+  --sidebar: #141414;
+  --sidebar-foreground: #ededed;
+  --sidebar-primary: #fed731;
+  --sidebar-primary-foreground: #191500;
+  --sidebar-accent: #2a2508;
+  --sidebar-accent-foreground: #fed731;
+  --sidebar-border: #2a2a2a;
+  --sidebar-ring: #fed731;
+
+  --chart-1: #fed731;
+  --chart-2: #ffffff;
+  --chart-3: #a3a3a3;
+  --chart-4: #737373;
+  --chart-5: #525252;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer base {
+  body {
+    @apply font-body
+      bg-background
+      text-text-primary
+      text-[18px]
+      leading-[1.6];
+  }
+
+  /* ==========================================================================
+     Typography
+     ========================================================================== */
+
+  h1,
+  .h1 {
+    @apply font-heading font-bold
+      text-[40px] leading-[1.16] tracking-normal
+      sm:text-[48px]
+      md:text-[60px]
+      lg:text-[60px]
+      xl:text-[64px]
+      2xl:text-[80px]
+      text-text-primary;
+  }
+
+  h2,
+  .h2 {
+    @apply font-heading font-semibold
+      text-[32px] leading-[1.16] tracking-normal
+      sm:text-[36px]
+      md:text-[40px]
+      lg:text-[40px]
+      xl:text-[48px]
+      2xl:text-[50px]
+      text-text-primary;
+  }
+
+  h3,
+  .h3 {
+    @apply font-heading font-semibold
+      text-[28px] leading-[1.16] tracking-normal
+      sm:text-[32px]
+      md:text-[32px]
+      lg:text-[32px]
+      xl:text-[34px]
+      2xl:text-[36px]
+      text-text-primary;
+  }
+
+  h4,
+  .h4 {
+    @apply font-heading font-semibold
+      text-[22px] leading-[1.16] tracking-normal
+      sm:text-[24px]
+      md:text-[26px]
+      lg:text-[26px]
+      xl:text-[28px]
+      2xl:text-[28px]
+      text-text-primary;
+  }
+
+  h5,
+  .h5 {
+    @apply font-heading font-bold
+      text-[18px] leading-[1.16] tracking-normal
+      sm:text-[20px]
+      md:text-[22px]
+      lg:text-[22px]
+      xl:text-[24px]
+      2xl:text-[24px]
+      text-text-primary;
+  }
+
+  h6,
+  .h6 {
+    @apply font-heading font-semibold
+      text-[16px] leading-[1.16] tracking-normal
+      sm:text-[17px]
+      md:text-[18px]
+      lg:text-[18px]
+      xl:text-[22px]
+      2xl:text-[20px]
+      text-text-primary;
+  }
+
+  h7,
+  .h7 {
+    @apply font-heading font-semibold
+      text-[16px] leading-[1.16] tracking-normal
+      sm:text-[16px]
+      md:text-[18px]
+      lg:text-[18px]
+      xl:text-[18px]
+      2xl:text-[18px]
+      text-text-primary;
+  }
+
+  .hero-h {
+    @apply font-heading font-bold
+      text-[40px] leading-[1.16] tracking-normal
+      sm:text-[48px]
+      md:text-[54px]
+      lg:text-[54px]
+      xl:text-[60px]
+      2xl:text-[64px]
+      text-text-primary;
+  }
+}
+
+@layer components {
+  /* ==========================================================================
+  Container
+  ========================================================================== */
+
+  .section-container {
+    @apply mx-auto w-full max-w-[1400px] px-5 min-[1440px]:px-0;
+  }
+
+  /* ==========================================================================
+     Paragraph Text Utilities
+     ========================================================================== */
+
+  .para-text-lg {
+    @apply font-body font-normal
+      text-[16px] leading-[1.6]
+      sm:text-[17px]
+      md:text-[18px]
+      lg:text-[19px]
+      xl:text-[20px]
+      2xl:text-[20px]
+      text-text-primary;
+  }
+
+  .para-text-md {
+    @apply font-body font-normal
+      text-[14px] leading-[1.6]
+      sm:text-[15px]
+      md:text-[16px]
+      lg:text-[17px]
+      xl:text-[18px]
+      2xl:text-[18px]
+      text-text-primary;
+  }
+
+  .para-text-sm {
+    @apply font-body font-normal
+      text-[13px] leading-[1.6]
+      sm:text-[14px]
+      md:text-[14px]
+      lg:text-[15px]
+      xl:text-[16px]
+      2xl:text-[16px]
+      text-text-primary;
+  }
+
+  .para-text-xs {
+    @apply font-body font-medium
+      text-[12px] leading-[1.41]
+      sm:text-[13px]
+      md:text-[13px]
+      lg:text-[14px]
+      xl:text-[14px]
+      2xl:text-[14px]
+      text-text-primary;
+  }
+
+  .para-text-xxs {
+    @apply font-body font-medium
+      text-[12px] leading-[1.41]
+      sm:text-[13px]
+      md:text-[13px]
+      lg:text-[14px]
+      xl:text-[14px]
+      2xl:text-[14px]
+      text-text-neutral;
+  }
+
+  /* ==========================================================================
+  Section
+  ========================================================================== */
+
+  .section-padding {
+    @apply py-10
+      sm:py-[60px]
+      lg:py-20
+      xl:py-[100px];
+  }
+
+  /* ==========================================================================
+     Buttons
+     ========================================================================== */
+
+  .btn {
+    @apply inline-flex items-center justify-center
+      gap-[8px]
+      w-fit
+      border border-transparent
+      font-body font-semibold
+      whitespace-nowrap
+      cursor-pointer
+      transition-all duration-250 ease-in-out;
+  }
+
+  /* ==========================================================================
+     Button Sizes
+     ========================================================================== */
+
+  .btn-sm {
+    @apply h-[32px]
+      px-[14px]
+      text-[13px]
+      rounded-[8px]
+
+      sm:h-[34px]
+      sm:px-[16px]
+      sm:text-[14px]
+
+      md:h-[36px]
+      md:px-[16px]
+      md:text-[13px]
+
+      lg:h-[38px]
+      lg:px-[16px]
+      lg:text-[13px]
+
+      xl:h-[40px]
+      xl:px-[16px]
+      xl:text-[14px]
+
+      2xl:h-[40px]
+      2xl:px-[16px]
+      2xl:text-[14px];
+  }
+
+  .btn-md {
+    @apply h-[40px]
+      px-[20px]
+      text-[15px]
+      rounded-[8px]
+
+      sm:h-[42px]
+      sm:px-[24px]
+      sm:text-[16px]
+
+      md:h-[44px]
+      md:px-[24px]
+      md:text-[15px]
+
+      lg:h-[46px]
+      lg:px-[24px]
+      lg:text-[15px]
+
+      xl:h-[48px]
+      xl:px-[24px]
+      xl:text-[16px]
+
+      2xl:h-[48px]
+      2xl:px-[24px]
+      2xl:text-[16px];
+  }
+
+  .btn-lg {
+    @apply h-[44px]
+      px-[28px]
+      text-[16px]
+      rounded-[8px]
+
+      sm:h-[48px]
+      sm:px-[32px]
+      sm:text-[16px]
+
+      md:h-[50px]
+      md:px-[32px]
+      md:text-[16px]
+
+      lg:h-[52px]
+      lg:px-[32px]
+      lg:text-[16px]
+
+      xl:h-[56px]
+      xl:px-[32px]
+      xl:text-[18px]
+
+      2xl:h-[56px]
+      2xl:px-[32px]
+      2xl:text-[18px];
+  }
+
+  /* ==========================================================================
+     Primary Button
+     ========================================================================== */
+
+  .btn-primary {
+    @apply font-heading font-medium
+      text-[18px]
+      leading-[22.4px]
+      py-[11px]
+      px-[28px]
+      rounded-[99px]
+      border border-transparent
+      bg-primary
+      text-primary-foreground
+      hover:opacity-95
+      active:translate-y-px
+      disabled:opacity-50
+      disabled:cursor-not-allowed
+
+      sm:text-[18px]
+      sm:py-[11px]
+      sm:px-[28px]
+
+      md:text-[18px]
+      md:py-[11px]
+      md:px-[28px]
+
+      lg:text-[18px]
+      lg:py-[11px]
+      lg:px-[28px]
+
+      xl:text-[18px]
+      xl:py-[11px]
+      xl:px-[28px]
+
+      2xl:text-[18px]
+      2xl:py-[11px]
+      2xl:px-[28px];
+  }
+
+  /* ==========================================================================
+     Secondary Button
+     ========================================================================== */
+
+  .btn-secondary {
+    @apply font-heading font-medium
+      text-[18px]
+      leading-[22.4px]
+      py-[11px]
+      px-[28px]
+      rounded-[99px]
+      border border-transparent
+      bg-secondary
+      text-secondary-foreground
+      hover:opacity-95
+      active:translate-y-px
+      disabled:opacity-50
+      disabled:cursor-not-allowed
+
+      sm:text-[18px]
+      sm:py-[11px]
+      sm:px-[28px]
+
+      md:text-[18px]
+      md:py-[11px]
+      md:px-[28px]
+
+      lg:text-[18px]
+      lg:py-[11px]
+      lg:px-[28px]
+
+      xl:text-[18px]
+      xl:py-[11px]
+      xl:px-[28px]
+
+      2xl:text-[18px]
+      2xl:py-[11px]
+      2xl:px-[28px];
+  }
+
+  /* ==========================================================================
+     Action / Danger Button
+     ========================================================================== */
+
+  .btn-action,
+  .btn-danger {
+    @apply font-heading font-bold
+      text-[16px]
+      leading-[16px]
+      py-[13px]
+      px-[30px]
+      rounded-[16px]
+      border border-transparent
+      bg-primary
+      text-primary-foreground
+      hover:opacity-95
+      active:translate-y-px
+      disabled:opacity-50
+      disabled:cursor-not-allowed
+
+      sm:text-[16px]
+      sm:py-[13px]
+      sm:px-[30px]
+
+      md:text-[16px]
+      md:py-[13px]
+      md:px-[30px]
+
+      lg:text-[16px]
+      lg:py-[13px]
+      lg:px-[30px]
+
+      xl:text-[16px]
+      xl:py-[13px]
+      xl:px-[30px]
+
+      2xl:text-[16px]
+      2xl:py-[13px]
+      2xl:px-[30px];
+  }
+}
+
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+@keyframes blurDropIn {
+  0% {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(40px);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@utility blur-drop-in {
+  animation: blurDropIn 0.8s ease-in-out forwards;
+}
+
+/* --------------------------------------------------------------------------
+   Slide Up
+   -------------------------------------------------------------------------- */
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility slide-up {
+  animation: slideUp 0.8s ease-in-out forwards;
+}
+
+/* --------------------------------------------------------------------------
+   Hero Image Reveal
+   -------------------------------------------------------------------------- */
+
+@keyframes heroImageReveal {
+  from {
+    transform: scale(1.15);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@utility hero-image-reveal {
+  animation: heroImageReveal 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ==========================================================================
+   Horizontal Scroll Animations
+   ========================================================================== */
+
+@keyframes category-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-category-scroll {
+  width: max-content;
+  animation: category-scroll 20s linear infinite;
+
+  @media (min-width: 1024px) {
+    animation: none;
+    width: 100%;
+  }
+}
+
+@utility animate-video-scroll {
+  width: max-content;
+  animation: category-scroll 20s linear infinite;
+}
+
+/* ==========================================================================
+   Testimonial Scroll
+   ========================================================================== */
+
+@keyframes testimonial-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-testimonial-scroll {
+  width: max-content;
+  animation: testimonial-scroll 60s linear infinite;
+}
+
+/* ==========================================================================
+   Testimonial Heading
+   ========================================================================== */
+
+@keyframes scaleHeading {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.5);
+  }
+}
+
+@utility testimonial-heading {
+  animation: scaleHeading linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 100%;
+}
+
+/* ==========================================================================
+   Button Slide
+   ========================================================================== */
+
+@utility btn-slide {
+  @apply relative overflow-hidden;
+}
+
+@utility btn-label {
+  @apply block;
+
+  transition:
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-slide::after {
+  content: attr(data-text);
+
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform: translateY(100%);
+
+  transition:
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+
+  color: inherit;
+  font: inherit;
+}
+
+/* ==========================================================================
+   Button Hover Animation
+   ========================================================================== */
+
+.group:hover .btn-label {
+  transform: translateY(-200%);
+}
+
+.group:hover .btn-slide::after {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Button Icon
+   ========================================================================== */
+
+@utility button-icon {
+  transform-origin: center;
+
+  transition:
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .button-icon {
+  transform: rotate(45deg);
+}

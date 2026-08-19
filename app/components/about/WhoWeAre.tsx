@@ -40,7 +40,7 @@ const iconList = [
 
 export default function WhoWeAre() {
     return(
-        <div className="container flex items-center justify-center relative py-15 md:py-18 lg:py-20 xl:py-25 pt-0!">
+        <div className="section-container flex items-center justify-center relative py-15 md:py-18 lg:py-20 xl:py-25 pt-0!">
             <div className="max-w-7xl flex flex-col lg:flex-col items-start justify-center gap-7 sm:gap-8 md:gap-10 lg:gap-13 xl:gap-15">
                 <div className="w-full lg:min-w-xl h-full xl:min-w-3xl flex flex-col lg:flex-row items-start justify-center gap-6 sm:gap-7 md:gap-8 lg:gap-50 xl:gap-60">
                     <div className="flex flex-col items-start justify-center w-full lg:min-w-xl">

@@ -12,7 +12,7 @@ const serviceList = [
 export default function OurService(){
     return(
         <div className="bg-black py-15 md:py-18 lg:py-20 xl:py-25">
-            <div className="container flex flex-col gap-15">
+            <div className="section-container flex flex-col gap-15">
                 <div className="flex flex-col lg:flex-row gap-5 sm:gap-6 md:gap-8 justify-between items-start lg:items-center">
                     <Subtitle text="Our Services" variant="white"/>
                     <h2 className="text-white! max-w-[612px]">We offer more than quality services we focus on trusted relationships</h2>
@@ -20,7 +20,7 @@ export default function OurService(){
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                     {serviceList.map((item, index)=>(
-                       <div className="group overflow-hidden relative w-auto md:max-w-[473px] lg:max-w-[410px] xl:max-w-[410px] 2xl:max-w-[419px] min-h-[360px] sm:min-h-[400px] md:min-h-[430px] lg:min-h-[500px] 2xl:min-h-[700px]">
+                       <div key={index} className="group overflow-hidden relative w-auto md:max-w-[473px] lg:max-w-[410px] xl:max-w-[410px] 2xl:max-w-[419px] min-h-[360px] sm:min-h-[400px] md:min-h-[430px] lg:min-h-[500px] 2xl:min-h-[700px]">
                       {/* Background Image */}
                       <Image
                         src={item.bgImageSrc}

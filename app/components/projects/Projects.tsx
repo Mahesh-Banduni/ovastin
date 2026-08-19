@@ -23,7 +23,7 @@ const keyFeatures = {
 
 export default function Projects(){
     return(
-        <div className="container pt-0 sm:pt-2 pb-15 md:pb-18 lg:pb-20 xl:pb-25 flex items-center justify-center">
+        <div className="section-container pt-0 sm:pt-2 pb-15 md:pb-18 lg:pb-20 xl:pb-25 flex items-center justify-center">
             <div className="max-w-[1320px] w-full flex flex-col gap-0">
                 {projectList.map((item, index) =>(
                     <div key={index} className={`flex flex-col ${index%2 == 0 ? 'md:flex-row' : 'md:flex-row-reverse'} w-full gap-0 border border-gray-300 rounded-2xl`}>
