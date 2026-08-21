@@ -3,9 +3,9 @@ import Subtitle from "../ui/website/Subtitle"
 
 export default function OurServices(){
     return(
-        <div className="pt-0 sm:pt-2 pb-15 md:pb-18 lg:pb-20 xl:pb-25">
-            <div className="section-container space-y-9 md:space-y-12 lg:space-y-15">
-                <div className="flex flex-col lg:flex-row gap-5 sm:gap-6 md:gap-8 justify-between items-start lg:items-center">
+        <div className="pt-0 sm:pt-2 pb-scale-md-25">
+            <div className="section-container space-y-scale-sm-15">
+                <div className="flex flex-col lg:flex-row gap-scale-sm-8 justify-between items-start lg:items-center">
                   <Subtitle text="Our Services" />
                   <h2 className="max-w-[612px]">We offer more than quality services we focus on trusted relationships</h2>
                   <div className="w-40 h-40">

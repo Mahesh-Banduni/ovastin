@@ -11,8 +11,8 @@ const contactInquiryType=["Web Development","Mobile App Development","UI/UX Desi
 export default function Contact(){
     return(
         <div className="h-full flex flex-col lg:flex-row">
-            <div className="w-full h-auto lg:w-1/2 bg-cover bg-center bg-no-repeat p-10 sm:p-11 md:p-13 md:p-15 lg:pr-25! flex items-center justify-center lg:justify-end" style={{backgroundImage:`url("/images/home/contact-bg-1.webp")`}}>
-                <div className="max-w-lg flex flex-col gap-10">
+            <div className="w-full h-auto lg:w-1/2 bg-cover bg-center bg-no-repeat p-scale-md-15 lg:pr-25! flex items-center justify-center lg:justify-end" style={{backgroundImage:`url("/images/home/contact-bg-1.webp")`}}>
+                <div className="max-w-lg flex flex-col gap-scale-md-10">
                     <div className="flex flex-col items-start w-full max-w-sm">
                       <Subtitle text="Contact Us" variant="white"/>
                       <h2 className="mt-2 mb-5 text-white!">Let’s Talk About Your Next Real Estate Move</h2>
@@ -20,9 +20,9 @@ export default function Contact(){
                         Hear what our clients say about their experience working with us.
                       </p>
                     </div>
-                    <div className="flex flex-col gap-4 md:gap-6 lg:gap-8">
+                    <div className="flex flex-col gap-scale-md-8">
                         {contactList.map((item, index)=>(
-                            <div key={index} className="flex flex-row gap-4 md:gap-5">
+                            <div key={index} className="flex flex-row gap-scale-md-5">
                                 <div className="flex flex-row gap-0">
                                     <div className="rounded-full p-4 bg-[var(--color-brand-bright)]">
                                         <Image src={item.icon} alt={item.title} width={30} height={20} className="object-cover" />
@@ -38,11 +38,11 @@ export default function Contact(){
                     </div>
                 </div>
             </div>
-            <div className="w-full h-auto lg:w-1/2 bg-cover bg-center bg-no-repeat py-10 sm:py-11 md:py-13 md:py-15 px-10 flex items-center justify-center lg:justify-end" style={{backgroundImage:`url("/images/home/contact-bg-2.webp")`}}>
-                <div className="bg-white px-8 sm:px-9 md:px-10 lg:px-11 py-8 sm:py-10 md:py-12 lg:py-13 h-full flex flex-col gap-6 md:gap-8 lg:gap-10">
+            <div className="w-full h-auto lg:w-1/2 bg-cover bg-center bg-no-repeat py-scale-md-15 px-scale-sm-10 flex items-center justify-center lg:justify-end" style={{backgroundImage:`url("/images/home/contact-bg-2.webp")`}}>
+                <div className="bg-white px-scale-sm-11 py-scale-sm-13 h-full flex flex-col gap-scale-md-10">
                     <p className="para-text-lg font-semibold! lg:text-[22px]!">Ready to Take the Next Step? Let’s Talk About Your Real Estate Goals</p>
-                    <div className="flex flex-col w-full gap-5 md:gap-6 lg:gap-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 lg:gap-6">
+                    <div className="flex flex-col w-full gap-scale-md-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-scale-md-6">
                             <label>
                                 <p className="para-text-sm text-text-primary! font-semibold! gap-0 mb-1.25">First Name<span className="text-red-500">*</span></p>
                                 <input type="text" placeholder="Enter your first name" className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />
@@ -52,7 +52,7 @@ export default function Contact(){
                                 <input type="text" placeholder="Enter your last name" className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />
                             </label> 
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 lg:gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-scale-sm-6">
                             <label>
                                 <p className="para-text-sm text-text-primary! font-semibold! gap-0 mb-1.25">Email<span className="text-red-500">*</span></p>
                                 <input type="text" placeholder="Enter your email" className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />

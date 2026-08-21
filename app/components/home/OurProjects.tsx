@@ -24,8 +24,8 @@ export default function OurProjects() {
   }
 
   return (
-    <div className="section-container py-15 md:py-18 lg:py-20 xl:py-25">
-      <div className="space-y-9 md:space-y-12 lg:space-y-15">
+    <div className="section-container section-padding">
+      <div className="space-y-scale-md-15">
         <div className="flex flex-col items-center">
           <Subtitle text="Our Projects" />
           <h2 className="mt-2 mb-5 text-center">Our Signature Developments</h2>

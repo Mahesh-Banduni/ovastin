@@ -48,8 +48,8 @@ const awardsList = [
 
 export default function OurAwards(){
     return(
-        <div className="py-15 md:py-18 lg:py-20 xl:py-25 flex flex-col items-center justify-center">
-            <div className="mb-9 md:mb-12 lg:mb-15">
+        <div className="section-padding flex flex-col items-center justify-center">
+            <div className="mb-scale-md-15">
                 <div className="section-container flex flex-col items-center">
                   <Subtitle text="Our Awards" />
                   <h2 className="mt-2 mb-5 text-center">Celebrating a legacy of excellence</h2>
@@ -60,7 +60,7 @@ export default function OurAwards(){
             </div>
             <div className="w-auto px-4">
               {awardsList.map((item,index)=>(
-                  <div key={index} className="relative group border-2 border-gray-100 first:rounded-t-2xl last:rounded-b-2xl w-full px-6 sm:px-8 md:px-10 lg:px-13 xl:px-15 py-5 md:py-6 lg:py-7 bg-transparent hover:bg-[var(--color-brand-bright)] transition-all duration-300 ease-in-out">
+                  <div key={index} className="relative group border-2 border-gray-100 first:rounded-t-2xl last:rounded-b-2xl w-full px-scale-md-15 py-scale-md-7 bg-transparent hover:bg-[var(--color-brand-bright)] transition-all duration-300 ease-in-out">
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                           <div className="flex flex-row gap-4 items-center justify-between md:justify-start">
                             <div className="flex flex-row gap-4 items-center justify-start">

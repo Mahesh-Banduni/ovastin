@@ -15,13 +15,13 @@ export default function Header(){
     const [showMobileMenu, setShowMobileValue]= useState<boolean>(false);
     return(
         <div className="sticky top-0 z-40 bg-transparent w-full h-auto flex items-center justify-center">
-            <div className="section-container bg-white flex flex-row items-center justify-between px-8! py-5 w-full relative rounded-full border-2 border-gray-100 shadow-sm shadow-gray-50 my-1 md:my-1.25 lg:my-1.5 mx-2! md:mx-2.5! lg:mx-3!">
+            <div className="section-container bg-white flex flex-row items-center justify-between px-8! py-5 w-full relative rounded-full border-2 border-gray-100 shadow-sm shadow-gray-50 my-scale-sm-1.5 my-scale-sm-3!">
                 <div className="relative h-9 min-w-37">
                     <Image src="/images/logo/ovastin-logo.svg" alt="Ovastin Logo" loading="eager" fill className="object-cover" />
                 </div>
-                <div className="hidden md:flex flex-row gap-1 md:gap-2 lg:gap-4 items-center justify-center w-full">
+                <div className="hidden md:flex flex-row gap-scale-md-4 items-center justify-center w-full">
                     {HeaderLinks.map((item, index)=>(
-                        <a href={item.link} key={index} className="px-1.5 md:px-2 lg:px-4 py-1.5 lg:py-2 text-center para-text-sm leading-[1]!">{item.name}</a>
+                        <a href={item.link} key={index} className="px-scale-md-4 py-scale-sm-2 text-center para-text-sm leading-[1]!">{item.name}</a>
                     ))}
                 </div>
                 <div className="inline-flex gap-5 items-center justify-center">

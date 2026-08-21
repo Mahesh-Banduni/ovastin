@@ -35,9 +35,9 @@ const counterList = [
 
 export default function WhoWeAre() {
     return(
-        <div className="section-container flex items-center justify-center relative py-15 md:py-18 lg:py-20 xl:py-25">
-            <div className="max-w-7xl flex flex-col lg:flex-row items-start justify-center gap-5 sm:gap-7.5 md:gap-10 lg:gap-13 xl:gap-17 2xl:gap-25">
-                <div className="w-full lg:max-w-xl h-full xl:max-w-3xl flex flex-col items-start justify-center gap-22 sm:gap-24 md:gap-26 lg:gap-28 xl:gap-30">
+        <div className="section-container flex items-center justify-center relative section-padding">
+            <div className="max-w-7xl flex flex-col lg:flex-row items-start justify-center gap-scale-lg-25">
+                <div className="w-full lg:max-w-xl h-full xl:max-w-3xl flex flex-col items-start justify-center gap-scale-md-30">
                     <div>
                         <Subtitle text="Who We Are" className="mb-4" />
                         <h3>We’re a top 25 builder and developer, committed to our clients’ success and creating stronger, more vibrant communities.</h3>
@@ -84,8 +84,8 @@ export default function WhoWeAre() {
                         <Image src="/images/home/whowearebg.webp" alt='Section Image' fill className="object-cover"></Image>
                     </div>
                 </div>
-                <div className="w-full lg:max-w-[450px] xl:max-w-[500px] h-full flex flex-col gap-10 md:gap-12 lg:gap-16 xl:gap-20 items-start justify-start">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 lg:gap-6 w-full">
+                <div className="w-full lg:max-w-[450px] xl:max-w-[500px] h-full flex flex-col gap-scale-lg-20 items-start justify-start">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-scale-md-6 w-full">
                     {counterList.map((item, index) => (
                       <div
                         key={index}
@@ -123,7 +123,7 @@ export default function WhoWeAre() {
                       </div>
                     ))}
                   </div>
-                  <div className="flex flex-col gap-6 md:gap-7.5 lg:gap-9">
+                  <div className="flex flex-col gap-scale-md-9">
                     <p className="para-text-sm">At Estalane, we create thoughtful spaces that blend design, innovation, and lasting value. Every project reflects our commitment to quality, sustainability, and better living.</p>
                     <Button variant="primary" text="More About Us"/>
                   </div>

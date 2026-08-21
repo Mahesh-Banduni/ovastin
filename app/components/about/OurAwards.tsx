@@ -49,22 +49,22 @@ const awardsList = [
 
 export default function OurAwards(){
     return(
-        <div className="section-container py-15 md:py-18 lg:py-20 xl:py-25 flex flex-col lg:flex-row items-center justify-center gap-8 sm:gap-10 md:gap-12 lg:gap-15">
-            <div className="mb-9 md:mb-12 lg:mb-15 max-w-xl">
+        <div className="section-container section-padding flex flex-col lg:flex-row items-center justify-center gap-scale-md-15">
+            <div className="mb-scale-md-15 max-w-xl">
                 <div className="flex flex-col items-start w-full">
                   <Subtitle text="Our Awards" />
                   <h2 className="mt-2 mb-5 text-start">Celebrating a Legacy of Excellence and Recognition</h2>
                   <p className="para-text-sm text-start max-w-2xl">
                     Our commitment to excellence has earned us recognition on some of the industry's most prestigious platforms. Every award we receive reflects our dedication to quality, innovation, and lasting impact in real estate.
                   </p>
-                  <Button variant="secondary" text="Know More" className="mt-5 md:mt-6 lg:mt-7" />
+                  <Button variant="secondary" text="Know More" className="mt-scale-sm-7" />
                 </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-scale-sm-6">
               {awardsList.map((item, index) => (
                 <div
                   key={index}
-                  className="w-full max-w-[324px] min-h-[360px] mx-auto bg-black hover:bg-[var(--color-brand-bright)] rounded-2xl overflow-hidden flex flex-col items-center justify-center p-6 md:p-8 lg:p-10 group"
+                  className="w-full max-w-[324px] min-h-[360px] mx-auto bg-black hover:bg-[var(--color-brand-bright)] rounded-2xl overflow-hidden flex flex-col items-center justify-center p-scale-md-10 group"
                 >
                   <Image
                     src={item.iconSrc}

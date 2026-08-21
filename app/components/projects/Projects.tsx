@@ -23,7 +23,7 @@ const keyFeatures = {
 
 export default function Projects(){
     return(
-        <div className="section-container pt-0 sm:pt-2 pb-15 md:pb-18 lg:pb-20 xl:pb-25 flex items-center justify-center">
+        <div className="section-container pt-0 sm:pt-2 pb-scale-md-25 flex items-center justify-center">
             <div className="max-w-[1320px] w-full flex flex-col gap-0">
                 {projectList.map((item, index) =>(
                     <div key={index} className={`flex flex-col ${index%2 == 0 ? 'md:flex-row' : 'md:flex-row-reverse'} w-full gap-0 border border-gray-300 rounded-2xl`}>
@@ -34,9 +34,9 @@ export default function Projects(){
                         </div>
 
                         {/* Details Section */}
-                        <div className={`w-full md:w-1/2 p-8 sm:p-9 md:p-10 lg:p-12 flex flex-col gap-5.5 md:gap-7 lg:gap-8 justify-center`}>
+                        <div className={`w-full md:w-1/2 p-scale-md-12 flex flex-col gap-scale-sm-8 justify-center`}>
                             <h5 className="underline">{item.title}</h5>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-3.5 lg:gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-scale-sm-4">
                                 <div className="flex flex-row items-start gap-3 w-full">
                                     <div className="w-5.5 md:w-7 h-5.5 md:h-7"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 17 17" fill="none"><path d="M13.5844 2.10594C12.2263 0.7479 10.4207 0 8.5002 0C6.57966 0 4.77401 0.7479 3.416 2.10594C2.05796 3.46402 1.31006 5.2696 1.31006 7.1901C1.31006 11.0753 4.98359 14.3068 6.95715 16.0428C7.2314 16.2841 7.46824 16.4924 7.65694 16.6687C7.89334 16.8895 8.19678 16.9999 8.50016 16.9999C8.80361 16.9999 9.10698 16.8895 9.34342 16.6687C9.53211 16.4924 9.76895 16.2841 10.0432 16.0428C12.0168 14.3067 15.6903 11.0753 15.6903 7.1901C15.6903 5.2696 14.9424 3.46402 13.5844 2.10594ZM9.38546 15.2952C9.10519 15.5417 8.86317 15.7546 8.66362 15.941C8.57195 16.0266 8.42838 16.0266 8.33667 15.941C8.13715 15.7546 7.8951 15.5417 7.61483 15.2951C5.75944 13.663 2.30582 10.625 2.30582 7.19014C2.30582 3.7746 5.08456 0.995861 8.50013 0.995861C11.9157 0.995861 14.6944 3.7746 14.6944 7.19014C14.6944 10.625 11.2408 13.663 9.38546 15.2952Z" fill="currentColor"></path><path d="M8.50015 3.74988C6.75297 3.74988 5.33154 5.17127 5.33154 6.91845C5.33154 8.66563 6.75297 10.087 8.50015 10.087C10.2473 10.087 11.6687 8.66563 11.6687 6.91845C11.6687 5.17127 10.2473 3.74988 8.50015 3.74988ZM8.50015 9.09116C7.30208 9.09116 6.32737 8.11645 6.32737 6.91842C6.32737 5.72038 7.30208 4.74567 8.50015 4.74567C9.69822 4.74567 10.6729 5.72038 10.6729 6.91842C10.6729 8.11645 9.69822 9.09116 8.50015 9.09116Z" fill="currentColor"></path></svg></div>
                                     <p className="para-text-md">Los Angles, California</p>                                
@@ -56,7 +56,7 @@ export default function Projects(){
                             </div> 
                             <div className="">
                                 <h6 className="mb-6 mt-2">Key Features:</h6>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-3.5 lg:gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-scale-sm-4">
                                     {keyFeatures.features.map((feature, index)=>( 
                                         <div key={index} className="flex flex-row gap-3">
                                             <Image src={"/images/about/check-icon.svg"} alt={feature} width={7} height={7} className="w-5.5 md:w-6 h-5.5 md:h-6" />

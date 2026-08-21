@@ -11,9 +11,9 @@ const serviceList = [
 
 export default function OurService(){
     return(
-        <div className="bg-black py-15 md:py-18 lg:py-20 xl:py-25">
-            <div className="section-container flex flex-col gap-15">
-                <div className="flex flex-col lg:flex-row gap-5 sm:gap-6 md:gap-8 justify-between items-start lg:items-center">
+        <div className="bg-black relative flex flex-col pb-14 sm:pb-18 md:pb-22 lg:pb-25">
+            <div className="section-container section-padding flex flex-col gap-15 h-full">
+                <div className="flex flex-col lg:flex-row gap-scale-md-8 justify-between items-start lg:items-center">
                     <Subtitle text="Our Services" variant="white"/>
                     <h2 className="text-white! max-w-[612px]">We offer more than quality services we focus on trusted relationships</h2>
                     <Button variant="secondary" text="See Our Services" />
@@ -30,7 +30,7 @@ export default function OurService(){
                       />
 
                       {/* Overlay Content */}
-                      <div className="relative z-10 px-8 sm:px-9 md:px-10 lg:px-12 py-11 md:py-13 lg:py-17 flex flex-col items-center justify-between h-full">
+                      <div className="relative z-10 px-scale-md-12 py-scale-sm-17 flex flex-col items-center justify-between h-full">
                         <Image
                           src={item.icon}
                           alt={`${item.title} Image`}
@@ -44,6 +44,7 @@ export default function OurService(){
                     ))}
                 </div>
             </div>
+            <div className="absolute bottom-0 left-0 right-0 h-14 sm:h-18 md:h-22 lg:h-25 bg-white z-50 rounded-t-[80px]"></div>
         </div>
     )
 }
