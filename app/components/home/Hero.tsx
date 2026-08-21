@@ -40,7 +40,7 @@ export default function HeroSection() {
           Designed for the Way You Live Today
         </h1>
 
-        <div className="flex flex-col min-[540px]:flex-row items-center justify-center gap-4 sm:gap-8 mb-1 lg:mb-8">
+        <div className="flex flex-col min-[540px]:flex-row items-center justify-center gap-scale-md-8 mb-1 lg:mb-8">
           <Button text="View Services" variant="secondary" />
 
           <div className="flex flex-col gap-1 items-start justify-center">

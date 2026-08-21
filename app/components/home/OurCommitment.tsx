@@ -11,9 +11,9 @@ const commitmentList = [
 
 export default function OurCommitment(){
     return(
-        <div className="bg-[#f6f3ec] py-15 md:py-18 lg:py-20 xl:py-25">
-            <div className="section-container space-y-9 md:space-y-12 lg:space-y-15">
-                <div className="flex flex-col lg:flex-row gap-5 sm:gap-6 md:gap-8 justify-between items-start lg:items-center">
+        <div className="bg-[#f6f3ec] section-padding">
+            <div className="section-container space-y-scale-sm-15">
+                <div className="flex flex-col lg:flex-row gap-scale-md-8 justify-between items-start lg:items-center">
                   <Subtitle text="Our Commitments" />
                   <h2 className="max-w-[612px]">We deliver more than promises we build with purpose and precision</h2>
                   <Button variant="secondary" text="Know More" />
@@ -22,14 +22,14 @@ export default function OurCommitment(){
                     <div className="relative overflow-hidden w-full lg:min-w-[550px] xl:min-w-[750px] 2xl:min-w-[900px] min-h-[300px] max-[400px]:min-h-[340px] sm:min-h-[400px] md:min-h-[550px] lg:min-h-[672px]">
                         <Image src="/images/home/commitment-bg.webp" alt="Section Image" fill className="object-cover hero-image-reveal" />
                     </div>
-                    <div className="p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-15 flex flex-col gap-6 md:gap-8 lg:gap-10 bg-white">
+                    <div className="p-scale-md-15 flex flex-col gap-scale-md-10 bg-white">
                         {commitmentList.map((item, index)=>(
                             <div key={index} className="flex flex-col gap-2 sm:gap-3 lg:gap-2 items-start">
-                                <div className="flex flex-row gap-5 md:gap-7 items-center justify-center">
+                                <div className="flex flex-row gap-scale-sm-7 items-center justify-center">
                                     <Image src={item.icon} alt={`Item ${index}`} width={48} height={48} className="object-cover w-[32px] h-[32px] md:w-[38px] md:h-[38px] lg:w-[48px] lg:h-[48px]" />
                                     <h4 className="pt-1">{item.title}</h4>
                                 </div>
-                                <div className="flex pl-13 sm:pl-13 md:pl-17 lg:pl-19 xl:pl-19">
+                                <div className="flex pl-scale-md-19">
                                     <p className="para-text-md text-text-primary!">{item.description}</p>
                                 </div>
                             </div>

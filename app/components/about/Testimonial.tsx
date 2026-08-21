@@ -88,21 +88,21 @@ export default function Testimonial(){
     }, [totalSlides]);
 
     return(
-      <div className="section-container py-15 md:py-18 lg:py-20 xl:py-25 flex flex-col xl:flex-row gap-8 md:gap-10 lg:gap-15 xl:gap-40">
+      <div className="section-container py-scale-lg-25 flex flex-col xl:flex-row gap--scale-lg-40">
         <div className="w-full lg:max-w-sm flex flex-col items-start justify-center rounded-[16px] hero-image-reveal">
             <Subtitle text="Testimonials" className="mb-4" />
 
-            <h2 className="mb-3 lg:mb-5">
+            <h2 className="mb-scale-sm-5">
               Trusted by homeowners & investors
             </h2>
 
-            <div className="inline-flex gap-2 items-center w-full mb-4 lg:mb-12">
+            <div className="inline-flex gap-2 items-center w-full mb-scale-md-12">
               <p className="para-text-sm max-w-lg">
                 Hear what our clients say about their experience working with us.
               </p>
             </div>
 
-            <div className="flex flex-col min-[540px]:flex-row items-center justify-center gap-4 sm:gap-8 mb-1 lg:mb-8">
+            <div className="flex flex-col min-[540px]:flex-row items-center justify-center gap-scale-sm-8 mb-scale-md-8">
               <div className="flex flex-col gap-1 items-start justify-center">
                 <span className="gap-2 text-primary inline-flex items-center">
                   <Star className="w-4 h-4 fill-black" />

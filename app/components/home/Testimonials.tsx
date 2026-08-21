@@ -81,8 +81,8 @@ export default function Testimonials() {
   }, [currentIndex]);
 
   return (
-    <div className="py-15 md:py-18 lg:py-20 xl:py-25">
-      <div className="space-y-9 md:space-y-12 lg:space-y-15">
+    <div className="section-padding">
+      <div className="space-y-scale-md-15">
         <div className="section-container flex flex-col items-center">
           <Subtitle text="Testimonials" />
           <h2 className="mt-2 mb-5 text-center">Trusted by homeowners & investors</h2>
@@ -97,7 +97,7 @@ export default function Testimonials() {
           onMouseLeave={() => setIsPaused(false)}
         >
           <div
-            className={`flex flex-row gap-3 sm:gap-4 md:gap-5 ${
+            className={`flex flex-row gap-scale-sm-5 ${
               isTransitionEnabled ? "transition-transform duration-700 ease-in-out" : ""
             }`}
             style={{
@@ -107,7 +107,7 @@ export default function Testimonials() {
             {duplicatedTestimonials.map((item, index) => (
               <div
                 key={`${item.author}-${index}`}
-                className={`min-w-[320px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[424px] px-4 md:px-5 lg:px-6 py-9 md:py-9.5 lg:py-10 flex flex-col gap-15 sm:gap-20 md:gap-30 lg:gap-40 w-full rounded-2xl border-2 border-gray-100 ${
+                className={`min-w-[320px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[424px] px-scale-sm-6 py-scale-sm-10 flex flex-col gap-scale-md-40 w-full rounded-2xl border-2 border-gray-100 ${
                   item.card === "primary"
                     ? "bg-black"
                     : item.card === "secondary"
@@ -115,7 +115,7 @@ export default function Testimonials() {
                     : "bg-white"
                 }`}
               >
-                <div className="flex flex-row gap-3 sm:gap-4 md:gap-5 items-center justify-start">
+                <div className="flex flex-row gap-scale-sm-5 items-center justify-start">
                   <Image
                     src={item.imageSrc}
                     alt={item.author}

@@ -2,10 +2,10 @@ export default function Hero({text, link}: {text: string, link: string}) {
     return(
         <div className="relative h-[350px] sm:h-[450px] md:h-[600px] lg:h-[90vh] w-full bg-cover bg-no-repeat bg-center hero-image-reveal" style={{backgroundImage: "url(/images/about/hero-bg.webp)"}}>
             <div className="absolute inset-0 bg-black/50 bg-opacity-50 z-10"></div>
-            <div className="relative max-w-[1720px] h-full mx-auto py-30 sm:py-32 md:py-36 lg:py-40 px-5 sm:px-6 md:px-8 lg:px-10 flex flex-col items-center justify-end gap-7 sm:gap-10 md:gap-13 lg:gap-15 z-50">
+            <div className="relative max-w-[1720px] h-full mx-auto py-scale-sm-40 px-scale-md-10 flex flex-col items-center justify-end gap-scale-md-15 z-50">
                 <p className="hero-h text-text-neutral!">{text}</p>
                 <div className="flex flex-col sm:flex-row items-center justify-between w-full max-w-7xl xl:max-w-[1320px] gap-5 border-t border-t-text-neutral/10">
-                    <div className="flex items-center gap-2 pt-3 sm:pt-4 md:pt-5 lg:pt-6">
+                    <div className="flex items-center gap-2 pt-scale-md-6">
                       <>
                         <a href="/" className="para-text-sm md:para-text-md text-neutral-200! font-semibold!">
                           Home
