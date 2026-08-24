@@ -4,12 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
-
-
-// ============================================================
-// USER & ROLE
-// ============================================================
 
 model User {
   id           String   @id @default(uuid())
@@ -19,13 +15,32 @@ model User {
 
   roleId       String
   role         Role     @relation(fields: [roleId], references: [id])
-
   isActive     Boolean  @default(true)
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  passwordResetOtps PasswordResetOtp[]
+
   @@index([roleId])
+}
+
+model PasswordResetOtp {
+  id        String   @id @default(cuid())
+
+  userId    String
+  otpHash   String
+
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  usedAt    DateTime?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model Role {
@@ -40,9 +55,7 @@ model Role {
 }
 
 
-// ============================================================
 // DEVELOPER
-// ============================================================
 
 model Developer {
   id          String    @id @default(uuid())
@@ -58,18 +71,8 @@ model Developer {
   updatedAt   DateTime  @updatedAt
 }
 
-
-// ============================================================
-// PROJECT
-// ============================================================
-
 model Project {
   id             String        @id @default(uuid())
-
-  // ----------------------------------------------------------
-  // Basic Information
-  // ----------------------------------------------------------
-
   name           String
   slug           String        @unique
   status         ProjectStatus @default(DRAFT)
@@ -80,17 +83,9 @@ model Project {
   developerId    String?
   developer      Developer?    @relation(fields: [developerId], references: [id], onDelete: SetNull)
 
-  // ----------------------------------------------------------
-  // Pricing
-  // ----------------------------------------------------------
-
   currency       String        @default("INR")
   priceMin       Decimal?      @db.Decimal(15, 2)
   priceMax       Decimal?      @db.Decimal(15, 2)
-
-  // ----------------------------------------------------------
-  // Location
-  // ----------------------------------------------------------
 
   address        String?
   city           String?
@@ -101,16 +96,8 @@ model Project {
   latitude       Decimal?      @db.Decimal(10, 7)
   longitude      Decimal?      @db.Decimal(10, 7)
 
-  // ----------------------------------------------------------
-  // Content
-  // ----------------------------------------------------------
-
   description    String?
   coverImage     String?
-
-  // ----------------------------------------------------------
-  // Relations
-  // ----------------------------------------------------------
 
   gallery        ProjectImage[]
   amenities      ProjectAmenity[]
@@ -124,11 +111,6 @@ model Project {
   @@index([city])
   @@index([state])
 }
-
-
-// ============================================================
-// PROJECT GALLERY
-// ============================================================
 
 model ProjectImage {
   id         String   @id @default(uuid())
@@ -146,11 +128,6 @@ model ProjectImage {
   @@index([projectId, sortOrder])
 }
 
-
-// ============================================================
-// AMENITY
-// ============================================================
-
 model Amenity {
   id          String           @id @default(uuid())
   name        String           @unique
@@ -163,11 +140,6 @@ model Amenity {
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 }
-
-
-// ============================================================
-// PROJECT ↔ AMENITY
-// ============================================================
 
 model ProjectAmenity {
   projectId  String
@@ -182,11 +154,6 @@ model ProjectAmenity {
   @@id([projectId, amenityId])
   @@index([amenityId])
 }
-
-
-// ============================================================
-// SERVICES
-// ============================================================
 
 model Service {
   id          String   @id @default(uuid())
@@ -205,11 +172,6 @@ model Service {
   @@index([isActive])
   @@index([sortOrder])
 }
-
-
-// ============================================================
-// ENUMS
-// ============================================================
 
 enum ProjectStatus {
   DRAFT
