@@ -1,5 +1,5 @@
 import Image from "next/image"
-import Subtitle from "../ui/website/Subtitle"
+import Subtitle from "../ui/custom/Subtitle"
 
 const contactList = [
     {icon: "/images/home/contact-icon-1.svg", image: "/images/home/contact-user-1.webp", title: "Call Us At", content: ["+88 016 482 459 48","+88 016 482 459 48"]},

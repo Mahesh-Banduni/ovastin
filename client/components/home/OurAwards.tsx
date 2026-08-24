@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Subtitle from "../ui/website/Subtitle";
+import Subtitle from "../ui/custom/Subtitle";
 
 const awardsList = [
   {

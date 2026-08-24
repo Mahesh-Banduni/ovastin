@@ -1,5 +1,5 @@
-import Button from "../ui/website/Button"
-import Subtitle from "../ui/website/Subtitle"
+import Button from "../ui/custom/Button"
+import Subtitle from "../ui/custom/Subtitle"
 
 export default function OurAwards(){
     return(

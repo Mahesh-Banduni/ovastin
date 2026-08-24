@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { PlayIcon, Star } from "lucide-react";
-import Button from "../ui/website/Button";
-import Subtitle from "../ui/website/Subtitle";
+import Button from "../ui/custom/Button";
+import Subtitle from "../ui/custom/Subtitle";
 import Image from "next/image";
 
 const heroReviewImagesList = [

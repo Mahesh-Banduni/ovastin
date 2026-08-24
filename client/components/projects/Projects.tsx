@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Button from "../ui/website/Button";
+import Button from "../ui/custom/Button";
 
 const projectList= [
     {title:"The Havenstone Residences",bgImgSrc:"/images/home/p-bg-1.webp", description:"Building a real estate development is a complicated task requiring both deep understanding…"},

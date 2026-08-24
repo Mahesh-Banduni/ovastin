@@ -1,6 +1,6 @@
 "use client";
 import {Star} from 'lucide-react';
-import Subtitle from '../ui/website/Subtitle';
+import Subtitle from '../ui/custom/Subtitle';
 import Image from 'next/image';
 import { useState,  useEffect } from 'react';
 

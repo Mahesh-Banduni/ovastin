@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import Subtitle from "../ui/website/Subtitle";
+import Subtitle from "../ui/custom/Subtitle";
 import { Star } from "lucide-react";
 
 const testimonialList = [

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image"
-import Button from "../ui/website/Button"
+import Button from "../ui/custom/Button"
 import { useState } from "react"
 
 const HeaderLinks =[

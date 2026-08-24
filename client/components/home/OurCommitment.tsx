@@ -1,6 +1,6 @@
 import Image from "next/image"
-import Button from "../ui/website/Button"
-import Subtitle from "../ui/website/Subtitle"
+import Button from "../ui/custom/Button"
+import Subtitle from "../ui/custom/Subtitle"
 import { title } from "process"
 
 const commitmentList = [

@@ -1,0 +1,233 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+// ============================================================
+// USER & ROLE
+// ============================================================
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+
+  roleId       String
+  role         Role     @relation(fields: [roleId], references: [id])
+
+  isActive     Boolean  @default(true)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([roleId])
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+
+  users       User[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+
+// ============================================================
+// DEVELOPER
+// ============================================================
+
+model Developer {
+  id          String    @id @default(uuid())
+  name        String
+  slug        String    @unique
+  description String?
+  logo        String?
+  website     String?
+
+  projects    Project[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+
+// ============================================================
+// PROJECT
+// ============================================================
+
+model Project {
+  id             String        @id @default(uuid())
+
+  // ----------------------------------------------------------
+  // Basic Information
+  // ----------------------------------------------------------
+
+  name           String
+  slug           String        @unique
+  status         ProjectStatus @default(DRAFT)
+  propertyType   PropertyType
+
+  possessionDate DateTime?
+
+  developerId    String?
+  developer      Developer?    @relation(fields: [developerId], references: [id], onDelete: SetNull)
+
+  // ----------------------------------------------------------
+  // Pricing
+  // ----------------------------------------------------------
+
+  currency       String        @default("INR")
+  priceMin       Decimal?      @db.Decimal(15, 2)
+  priceMax       Decimal?      @db.Decimal(15, 2)
+
+  // ----------------------------------------------------------
+  // Location
+  // ----------------------------------------------------------
+
+  address        String?
+  city           String?
+  state          String?
+  country        String        @default("India")
+  postalCode     String?
+
+  latitude       Decimal?      @db.Decimal(10, 7)
+  longitude      Decimal?      @db.Decimal(10, 7)
+
+  // ----------------------------------------------------------
+  // Content
+  // ----------------------------------------------------------
+
+  description    String?
+  coverImage     String?
+
+  // ----------------------------------------------------------
+  // Relations
+  // ----------------------------------------------------------
+
+  gallery        ProjectImage[]
+  amenities      ProjectAmenity[]
+
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([developerId])
+  @@index([status])
+  @@index([propertyType])
+  @@index([city])
+  @@index([state])
+}
+
+
+// ============================================================
+// PROJECT GALLERY
+// ============================================================
+
+model ProjectImage {
+  id         String   @id @default(uuid())
+
+  projectId  String
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  imageUrl   String
+  altText    String?
+  sortOrder  Int      @default(0)
+
+  createdAt  DateTime @default(now())
+
+  @@index([projectId])
+  @@index([projectId, sortOrder])
+}
+
+
+// ============================================================
+// AMENITY
+// ============================================================
+
+model Amenity {
+  id          String           @id @default(uuid())
+  name        String           @unique
+  slug        String           @unique
+  description String?
+  icon        String?
+
+  projects    ProjectAmenity[]
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+
+// ============================================================
+// PROJECT ↔ AMENITY
+// ============================================================
+
+model ProjectAmenity {
+  projectId  String
+  amenityId  String
+
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  amenity    Amenity  @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+
+  @@id([projectId, amenityId])
+  @@index([amenityId])
+}
+
+
+// ============================================================
+// SERVICES
+// ============================================================
+
+model Service {
+  id          String   @id @default(uuid())
+
+  name        String
+  slug        String   @unique
+  description String?
+  icon        String?
+
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum ProjectStatus {
+  DRAFT
+  UPCOMING
+  ACTIVE
+  SOLD_OUT
+  COMPLETED
+  ARCHIVED
+}
+
+enum PropertyType {
+  APARTMENT
+  VILLA
+  PLOT
+  TOWNSHIP
+  COMMERCIAL
+  OFFICE
+  RETAIL
+  INDUSTRIAL
+  OTHER
+}
