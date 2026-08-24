@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -8,7 +8,7 @@ import { Lock, Mail, ArrowRight, AlertCircle, Loader2, Eye, EyeOff, ShieldCheck 
 import Input from "../../../components/ui/store/Input";
 import Label from "../../../components/ui/store/Label";
 
-export default function SignInPage() {
+function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/admin";
@@ -189,5 +189,31 @@ export default function SignInPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+/**
+ * `useSearchParams()` requires a Suspense boundary, otherwise static
+ * prerendering fails during `next build` (CSR bailout). The actual form
+ * lives in `SignInForm`; this wrapper provides the boundary.
+ */
+export default function SignInPage() {
+  return (
+    <Suspense
+      fallback={
+        <div
+          className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] backdrop-blur-xl p-8 shadow-2xl"
+          style={{ boxShadow: "0 25px 80px -10px rgba(0,0,0,0.12), 0 0 0 1px var(--border)" }}
+          aria-busy="true"
+        >
+          <div className="flex flex-col items-center justify-center py-16 gap-4 text-[var(--text-muted)]">
+            <Loader2 size={24} className="animate-spin" />
+            <span className="text-sm">Loading sign in…</span>
+          </div>
+        </div>
+      }
+    >
+      <SignInForm />
+    </Suspense>
   );
 }
