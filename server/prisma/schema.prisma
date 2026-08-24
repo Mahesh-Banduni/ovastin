@@ -173,6 +173,36 @@ model Service {
   @@index([sortOrder])
 }
 
+model Award {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  year        Int?
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
+model ContactFormSubmission {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  message   String
+  isRead    Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([isRead])
+  @@index([createdAt])
+}
+
 enum ProjectStatus {
   DRAFT
   UPCOMING

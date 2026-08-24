@@ -17,7 +17,7 @@ export class MailService {
       nodemailer.createTransport({
         host: config.mail.host,
         port: config.mail.port,
-        secure: config.mail.port === 465,
+        secure: config.mail.secure,
 
         auth: {
           user: config.mail.user,

@@ -20,7 +20,7 @@ export class AuthRepository {
   async findUserByEmail(
     email: string
   ) {
-    return this.prisma.user.findUnique({
+    return this.prisma.user.findFirst({
       where: {
         email: email.toLowerCase()
       }
@@ -30,7 +30,7 @@ export class AuthRepository {
   async findUserById(
     userId: string
   ) {
-    return this.prisma.user.findUnique({
+    return this.prisma.user.findFirst({
       where: {
         id: userId
       }

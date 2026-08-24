@@ -10,9 +10,10 @@ export function Table({
         relative
         w-full
         overflow-auto
-        rounded-xl
+        rounded-2xl
         border
         border-[var(--border)]
+        shadow-sm
       "
     >
       <table
@@ -36,6 +37,8 @@ export function TableHeader({
     <thead
       className={`
         bg-[var(--surface)]
+        border-b
+        border-[var(--border)]
         ${className}
       `}
       {...props}
@@ -49,7 +52,7 @@ export function TableBody({
 }: HTMLAttributes<HTMLTableSectionElement>) {
   return (
     <tbody
-      className={className}
+      className={`divide-y divide-[var(--border)] ${className}`}
       {...props}
     />
   );
@@ -80,10 +83,9 @@ export function TableRow({
   return (
     <tr
       className={`
-        border-b
-        border-[var(--border)]
         transition-colors
-        hover:bg-[var(--surface-hover)]
+        duration-150
+        hover:bg-[var(--brand)]/5
         ${className}
       `}
       {...props}
@@ -98,12 +100,15 @@ export function TableHead({
   return (
     <th
       className={`
-        h-12
+        h-11
         px-4
         text-left
         align-middle
+        text-xs
         font-semibold
-        text-[var(--text-primary)]
+        uppercase
+        tracking-wider
+        text-[var(--text-muted)]
         whitespace-nowrap
         ${className}
       `}
@@ -119,7 +124,8 @@ export function TableCell({
   return (
     <td
       className={`
-        p-4
+        px-4
+        py-3.5
         align-middle
         text-[var(--text-secondary)]
         ${className}

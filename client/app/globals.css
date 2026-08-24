@@ -142,10 +142,15 @@
 
   /* Background / surfaces */
   --surface: #ffffff;
+  --surface-hover: #f5f5f5;
 
   --bg-2: #191500;
   --bg-3: #f5f5f5;
   --bg-4: #fed731;
+
+  /* Brand alias */
+  --brand: #191500;
+  --brand-foreground: #ffffff;
 
   /* Feedback */
   --success: #16a34a;
@@ -235,10 +240,15 @@
   --text-muted: #737373;
 
   --surface: #141414;
+  --surface-hover: #1e1e1e;
 
   --bg-2: #ffffff;
   --bg-3: #1a1a1a;
   --bg-4: #fed731;
+
+  /* Brand alias */
+  --brand: #fed731;
+  --brand-foreground: #191500;
 
   --sidebar: #141414;
   --sidebar-foreground: #ededed;

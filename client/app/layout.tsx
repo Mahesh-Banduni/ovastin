@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { DM_Serif_Display, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import Header from "../components/shared/Header";
-import Footer from "../components/shared/Footer";
+import ConditionalHeaderFooter from "../components/shared/ConditionalHeaderFooter";
+import AuthProvider from "../components/providers/AuthProvider";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
@@ -16,7 +16,8 @@ const dmSerifDisplay = DM_Serif_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Ovastin"
+  title: "Ovastin - Real Estate & Property Development",
+  description: "Modern luxury living and premium real estate development.",
 };
 
 export default function RootLayout({
@@ -27,12 +28,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakartaSans.variable}} ${dmSerifDisplay.variable} h-full antialiased`}
+      className={`${plusJakartaSans.variable} ${dmSerifDisplay.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <Header />
-          {children}
-        <Footer />
+      <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--text-primary)]">
+        <AuthProvider>
+          <ConditionalHeaderFooter>
+            {children}
+          </ConditionalHeaderFooter>
+        </AuthProvider>
       </body>
     </html>
   );

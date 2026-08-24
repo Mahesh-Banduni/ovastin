@@ -70,18 +70,20 @@ export default function Sidebar({
     <SidebarThemeContext.Provider value={theme}>
       <>
         {/* Mobile Backdrop */}
-        {open && (
-          <div
-            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden"
-            onClick={() => onOpenChange(false)}
-          />
-        )}
+        <div
+          className={`
+            fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden
+            transition-opacity duration-300
+            ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+          `}
+          onClick={() => onOpenChange(false)}
+        />
 
         {/* Sidebar */}
         <aside
           className={`
             fixed left-0 top-0 z-50 h-screen w-72 border-r
-            transition-[width,transform] duration-300 ease-in-out
+            transition-transform duration-300 ease-in-out
             ${open ? "translate-x-0" : "-translate-x-full"}
             lg:translate-x-0 ${collapsed ? "lg:w-16" : "lg:w-72"}
           `}
@@ -90,16 +92,14 @@ export default function Sidebar({
             borderColor,
           }}
         >
-          {/* Close Button */}
+          {/* Close Button — mobile only */}
           <button
             type="button"
-            className="absolute right-4 top-4 cursor-pointer rounded-md p-1.5 lg:hidden"
-            style={{
-              color: textColor,
-            }}
+            className="absolute right-3 top-3 cursor-pointer rounded-lg p-1.5 transition-colors hover:bg-[var(--surface-hover)] lg:hidden"
+            style={{ color: textColor }}
             onClick={() => onOpenChange(false)}
           >
-            <X size={20} />
+            <X size={18} />
           </button>
 
           {children}
