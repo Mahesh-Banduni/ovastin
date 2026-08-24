@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { DM_Serif_Display, Plus_Jakarta_Sans } from "next/font/google";
 import "./main-globals.css";
-import Header from "./components/shared/Header";
-import Footer from "./components/shared/Footer";
+import Header from "../components/shared/Header";
+import Footer from "../components/shared/Footer";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
