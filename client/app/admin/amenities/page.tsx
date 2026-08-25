@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Plus, Edit2, Trash2, Sparkles, Loader2 } from "lucide-react";
-import AdminHeader from "../../../components/admin/AdminHeader";
 import {
   Table,
   TableHeader,
@@ -15,7 +14,9 @@ import Modal from "../../../components/ui/store/Modal";
 import SearchInput from "../../../components/ui/store/SearchInput";
 import Pagination from "../../../components/ui/store/Pagination";
 import AmenityForm from "../../../components/admin/forms/AmenityForm";
+import AdminPageHeader from "../../../components/admin/AdminPageHeader";
 import { useAmenities, AmenityItem } from "../../../hooks/useAmenities";
+import Button from "@/components/ui/store/Button";
 
 export default function AdminAmenitiesPage() {
   const {
@@ -72,23 +73,21 @@ export default function AdminAmenitiesPage() {
   const totalPages = Math.ceil(total / pageSize) || 1;
 
   return (
-    <div>
-      <AdminHeader
-        onOpenSidebar={() => {}}
+    <div className="p-4 sm:p-8 space-y-6 max-w-7xl mx-auto">
+      {/* ── Top Page Header Banner ─────────────────────────── */}
+      <AdminPageHeader
+        icon={Sparkles}
         title="Amenities"
-        subtitle="Manage shared features, clubhouses, recreational amenities, and specifications"
+        subtitle="Manage shared features, clubhouses, recreational amenities, and specifications."
+        count={total}
+        countLabel="total"
         action={
-          <button
-            onClick={handleOpenCreate}
-            className="h-10 px-4 rounded-xl bg-[var(--brand)] text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm shadow-[var(--brand)]/20 cursor-pointer"
-          >
-            <Plus size={16} />
+          <Button variant="primary" onClick={handleOpenCreate}>
+            <Plus size={16} strokeWidth={2.25} />
             <span>Add Amenity</span>
-          </button>
+          </Button>
         }
       />
-
-      <div className="p-4 sm:p-8 space-y-6 max-w-7xl mx-auto">
         {/* Search Bar */}
         <div className="max-w-md">
           <SearchInput
@@ -116,13 +115,14 @@ export default function AdminAmenitiesPage() {
             <p className="text-sm text-[var(--text-muted)] mt-1">
               Add amenities like Swimming Pool, Clubhouse, Gym to link with projects.
             </p>
-            <button
+            <Button
+              variant="primary"
               onClick={handleOpenCreate}
-              className="mt-4 h-10 px-4 rounded-xl bg-[var(--brand)] text-white text-sm font-medium hover:opacity-90 inline-flex items-center gap-2"
+              className="mt-4"
             >
               <Plus size={16} />
               Add Amenity
-            </button>
+            </Button>
           </div>
         ) : (
           <div className="space-y-4">
@@ -171,20 +171,20 @@ export default function AdminAmenitiesPage() {
 
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1.5">
-                          <button
+                          <Button variant="primary"
                             onClick={() => handleOpenEdit(amenity)}
                             title="Edit Amenity"
-                            className="p-2 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+                            className="h-8 w-8 p-2"
                           >
                             <Edit2 size={16} />
-                          </button>
-                          <button
+                          </Button>
+                          <Button variant="danger"
                             onClick={() => setDeleteId(amenity.id)}
                             title="Delete Amenity"
-                            className="p-2 rounded-lg hover:bg-[var(--destructive)]/10 text-[var(--text-secondary)] hover:text-[var(--destructive)] transition-colors cursor-pointer"
+                            className="h-8 w-8 p-2"
                           >
-                            <Trash2 size={16} />
-                          </button>
+                            <Trash2 size={16}/>
+                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -206,7 +206,6 @@ export default function AdminAmenitiesPage() {
             )}
           </div>
         )}
-      </div>
 
       {/* Create / Edit Modal */}
       <Modal open={formModalOpen} onClose={() => setFormModalOpen(false)}>
@@ -227,21 +226,21 @@ export default function AdminAmenitiesPage() {
             Are you sure you want to delete this amenity? It will be unlinked from any associated projects.
           </p>
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-[var(--border)]">
-            <button
+            <Button variant="outline"
               onClick={() => setDeleteId(null)}
               disabled={deleting}
-              className="h-10 px-4 rounded-xl border border-[var(--border)] text-sm font-medium hover:bg-[var(--surface-hover)]"
+              className="h-10 px-4"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button variant="danger"
               onClick={handleDeleteConfirm}
               disabled={deleting}
-              className="h-10 px-5 rounded-xl bg-[var(--destructive)] text-white text-sm font-medium hover:opacity-90 flex items-center gap-2 cursor-pointer"
+              className="h-10 px-5"
             >
               {deleting && <Loader2 size={16} className="animate-spin" />}
               Delete Amenity
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>

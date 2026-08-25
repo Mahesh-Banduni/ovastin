@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Plus, Edit2, Trash2, Trophy, Loader2, Check, X } from "lucide-react";
-import AdminHeader from "../../../components/admin/AdminHeader";
 import {
   Table,
   TableHeader,
@@ -15,7 +14,9 @@ import Modal from "../../../components/ui/store/Modal";
 import SearchInput from "../../../components/ui/store/SearchInput";
 import Pagination from "../../../components/ui/store/Pagination";
 import AwardForm from "../../../components/admin/forms/AwardForm";
+import AdminPageHeader from "../../../components/admin/AdminPageHeader";
 import { useAwards, AwardItem } from "../../../hooks/useAwards";
+import Button from "@/components/ui/store/Button";
 
 export default function AdminAwardsPage() {
   const {
@@ -72,23 +73,21 @@ export default function AdminAwardsPage() {
   const totalPages = Math.ceil(total / pageSize) || 1;
 
   return (
-    <div>
-      <AdminHeader
-        onOpenSidebar={() => {}}
+    <div className="p-4 sm:p-8 space-y-6 max-w-7xl mx-auto">
+      {/* ── Top Page Header Banner ─────────────────────────── */}
+      <AdminPageHeader
+        icon={Trophy}
         title="Awards & Recognitions"
-        subtitle="Manage honors, industry certificates, and architectural milestones"
+        subtitle="Manage honors, industry certificates, and architectural milestones."
+        count={total}
+        countLabel="total"
         action={
-          <button
-            onClick={handleOpenCreate}
-            className="h-10 px-4 rounded-xl bg-[var(--brand)] text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm shadow-[var(--brand)]/20 cursor-pointer"
-          >
-            <Plus size={16} />
+          <Button variant="primary" onClick={handleOpenCreate}>
+            <Plus size={16} strokeWidth={2.25} />
             <span>Add Award</span>
-          </button>
+          </Button>
         }
       />
-
-      <div className="p-4 sm:p-8 space-y-6 max-w-7xl mx-auto">
         {/* Search Bar */}
         <div className="max-w-md">
           <SearchInput
@@ -116,13 +115,13 @@ export default function AdminAwardsPage() {
             <p className="text-sm text-[var(--text-muted)] mt-1">
               Add your firm's accolades to display credibility on the website.
             </p>
-            <button
+            <Button variant="primary"
               onClick={handleOpenCreate}
-              className="mt-4 h-10 px-4 rounded-xl bg-[var(--brand)] text-white text-sm font-medium hover:opacity-90 inline-flex items-center gap-2"
+              className="mt-4"
             >
               <Plus size={16} />
               Add Award
-            </button>
+            </Button>
           </div>
         ) : (
           <div className="space-y-4">
@@ -134,7 +133,7 @@ export default function AdminAwardsPage() {
                     <TableHead>Year</TableHead>
                     <TableHead>Order</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead className="sticky right-0 z-10 bg-[var(--surface)] text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -192,22 +191,22 @@ export default function AdminAwardsPage() {
                         )}
                       </TableCell>
 
-                      <TableCell className="text-right">
+                      <TableCell className="sticky right-0 z-10 bg-[var(--surface)] text-right">
                         <div className="flex items-center justify-end gap-1.5">
-                          <button
+                          <Button variant="outline"
                             onClick={() => handleOpenEdit(award)}
                             title="Edit Award"
-                            className="p-2 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+                            className="h-8 w-8 p-2"
                           >
                             <Edit2 size={16} />
-                          </button>
-                          <button
+                          </Button>
+                          <Button variant="danger"
                             onClick={() => setDeleteId(award.id)}
                             title="Delete Award"
-                            className="p-2 rounded-lg hover:bg-[var(--destructive)]/10 text-[var(--text-secondary)] hover:text-[var(--destructive)] transition-colors cursor-pointer"
+                            className="h-8 w-8 p-2"
                           >
                             <Trash2 size={16} />
-                          </button>
+                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -229,7 +228,6 @@ export default function AdminAwardsPage() {
             )}
           </div>
         )}
-      </div>
 
       {/* Create / Edit Modal */}
       <Modal open={formModalOpen} onClose={() => setFormModalOpen(false)}>
@@ -250,21 +248,21 @@ export default function AdminAwardsPage() {
             Are you sure you want to delete this award record?
           </p>
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-[var(--border)]">
-            <button
+            <Button variant="outline"
               onClick={() => setDeleteId(null)}
               disabled={deleting}
-              className="h-10 px-4 rounded-xl border border-[var(--border)] text-sm font-medium hover:bg-[var(--surface-hover)]"
+              className="h-10 px-4"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button variant="danger"
               onClick={handleDeleteConfirm}
               disabled={deleting}
-              className="h-10 px-5 rounded-xl bg-[var(--destructive)] text-white text-sm font-medium hover:opacity-90 flex items-center gap-2 cursor-pointer"
+              className="h-10 px-5"
             >
               {deleting && <Loader2 size={16} className="animate-spin" />}
               Delete Award
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>

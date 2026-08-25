@@ -5,8 +5,10 @@ import Input from "../../ui/store/Input";
 import Label from "../../ui/store/Label";
 import Textarea from "../../ui/store/TextArea";
 import Switch from "../../ui/store/Switch";
+import { ImageUpload } from "../ImageUpload";
 import { AwardItem } from "../../../hooks/useAwards";
 import { Loader2 } from "lucide-react";
+import Button from "@/components/ui/store/Button";
 
 interface AwardFormProps {
   award?: AwardItem | null;
@@ -47,7 +49,7 @@ export default function AwardForm({ award, onSubmit, onCancel }: AwardFormProps)
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-5 max-h-[80vh] overflow-y-auto scrollbar-hide">
       <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
         <h2 className="text-lg font-semibold text-[var(--text-primary)]">
           {award ? "Edit Award" : "Add New Award"}
@@ -82,26 +84,24 @@ export default function AwardForm({ award, onSubmit, onCancel }: AwardFormProps)
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="space-y-1.5">
-          <Label>Image / Badge URL</Label>
-          <Input
-            type="url"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            placeholder="https://..."
-          />
-        </div>
+      <div className="space-y-1.5">
+        <ImageUpload
+          label="Award / Badge Image"
+          value={imageUrl}
+          onChange={(val) => setImageUrl(val || "")}
+          maxFiles={1}
+          description="Upload award trophy or certificate badge"
+        />
+      </div>
 
-        <div className="space-y-1.5">
-          <Label>Sort Order</Label>
-          <Input
-            type="number"
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
-            placeholder="0"
-          />
-        </div>
+      <div className="space-y-1.5">
+        <Label>Sort Order</Label>
+        <Input
+          type="number"
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          placeholder="0"
+        />
       </div>
 
       <div className="space-y-1.5">
@@ -122,22 +122,24 @@ export default function AwardForm({ award, onSubmit, onCancel }: AwardFormProps)
       </div>
 
       <div className="flex items-center justify-end gap-3 pt-4 border-t border-[var(--border)]">
-        <button
+        <Button
+          variant="outline"
           type="button"
           onClick={onCancel}
           disabled={loading}
           className="h-11 px-5 rounded-xl border border-[var(--border)] text-sm font-medium hover:bg-[var(--surface-hover)] transition-colors cursor-pointer"
         >
           Cancel
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="primary"
           type="submit"
           disabled={loading}
           className="h-11 px-6 rounded-xl bg-[var(--brand)] text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer"
         >
           {loading && <Loader2 size={16} className="animate-spin" />}
           {award ? "Save Changes" : "Create Award"}
-        </button>
+        </Button>
       </div>
     </form>
   );

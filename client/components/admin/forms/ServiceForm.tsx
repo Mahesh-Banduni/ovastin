@@ -7,6 +7,7 @@ import Textarea from "../../ui/store/TextArea";
 import Switch from "../../ui/store/Switch";
 import { ServiceItem } from "../../../hooks/useServices";
 import { Loader2 } from "lucide-react";
+import Button from "@/components/ui/store/Button";
 
 interface ServiceFormProps {
   service?: ServiceItem | null;
@@ -60,7 +61,7 @@ export default function ServiceForm({ service, onSubmit, onCancel }: ServiceForm
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-5 max-h-[80vh] overflow-y-auto scrollbar-hide">
       <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
         <h2 className="text-lg font-semibold text-[var(--text-primary)]">
           {service ? "Edit Service" : "Create New Service"}
@@ -134,22 +135,24 @@ export default function ServiceForm({ service, onSubmit, onCancel }: ServiceForm
       </div>
 
       <div className="flex items-center justify-end gap-3 pt-4 border-t border-[var(--border)]">
-        <button
+        <Button
+          variant="outline"
           type="button"
           onClick={onCancel}
           disabled={loading}
           className="h-11 px-5 rounded-xl border border-[var(--border)] text-sm font-medium hover:bg-[var(--surface-hover)] transition-colors cursor-pointer"
         >
           Cancel
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="primary"
           type="submit"
           disabled={loading}
           className="h-11 px-6 rounded-xl bg-[var(--brand)] text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer"
         >
           {loading && <Loader2 size={16} className="animate-spin" />}
           {service ? "Save Changes" : "Create Service"}
-        </button>
+        </Button>
       </div>
     </form>
   );

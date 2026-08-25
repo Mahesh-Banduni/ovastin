@@ -386,7 +386,7 @@ export function SelectContent({
       tabIndex={0}
       aria-activedescendant={activeOption?.id}
       className={cn(
-        "z-50 min-w-36 max-h-[250px] overflow-y-auto rounded-lg border bg-[var(--background)] border-[var(--border)] p-1 text-[var(--text-primary)] shadow-md duration-100 animate-in fade-in-0 zoom-in-95",
+        "z-50 min-w-36 max-h-[250px] overflow-y-auto scrollbar-hide rounded-lg border bg-[var(--background)] border-[var(--border)] p-1 text-[var(--text-primary)] shadow-md duration-100 animate-in fade-in-0 zoom-in-95",
         className
       )}
       onKeyDown={handleKeyDown}

@@ -68,7 +68,8 @@ export default function AdminLayout({
 
       {/* Main Content Area */}
       <div className="lg:pl-72 flex flex-col min-h-screen transition-all duration-300">
-        {/* Page-level header is rendered by each page via AdminHeader */}
+        {/* Common Admin Breadcrumb Header */}
+        <AdminHeader onOpenSidebar={() => setSidebarOpen(true)} />
         <main className="flex-1">
           {children}
         </main>
