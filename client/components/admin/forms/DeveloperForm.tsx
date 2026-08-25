@@ -4,8 +4,10 @@ import { useState } from "react";
 import Input from "../../ui/store/Input";
 import Label from "../../ui/store/Label";
 import Textarea from "../../ui/store/TextArea";
+import { ImageUpload } from "../ImageUpload";
 import { DeveloperItem } from "../../../hooks/useDevelopers";
 import { Loader2 } from "lucide-react";
+import Button from "@/components/ui/store/Button";
 
 interface DeveloperFormProps {
   developer?: DeveloperItem | null;
@@ -57,7 +59,7 @@ export default function DeveloperForm({ developer, onSubmit, onCancel }: Develop
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-5 max-h-[80vh] overflow-y-auto scrollbar-hide">
       <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
         <h2 className="text-lg font-semibold text-[var(--text-primary)]">
           {developer ? "Edit Developer" : "Create New Developer"}
@@ -92,26 +94,24 @@ export default function DeveloperForm({ developer, onSubmit, onCancel }: Develop
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="space-y-1.5">
-          <Label>Logo URL</Label>
-          <Input
-            type="url"
-            value={logo}
-            onChange={(e) => setLogo(e.target.value)}
-            placeholder="https://..."
-          />
-        </div>
+      <div className="space-y-1.5">
+        <ImageUpload
+          label="Developer Logo"
+          value={logo}
+          onChange={(val) => setLogo(val || "")}
+          maxFiles={1}
+          description="Upload logo image (PNG, JPG, SVG, WEBP)"
+        />
+      </div>
 
-        <div className="space-y-1.5">
-          <Label>Website</Label>
-          <Input
-            type="url"
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-            placeholder="https://prestigeconstructions.com"
-          />
-        </div>
+      <div className="space-y-1.5">
+        <Label>Website</Label>
+        <Input
+          type="url"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          placeholder="https://prestigeconstructions.com"
+        />
       </div>
 
       <div className="space-y-1.5">
@@ -124,22 +124,24 @@ export default function DeveloperForm({ developer, onSubmit, onCancel }: Develop
       </div>
 
       <div className="flex items-center justify-end gap-3 pt-4 border-t border-[var(--border)]">
-        <button
+        <Button
+          variant="outline"
           type="button"
           onClick={onCancel}
           disabled={loading}
           className="h-11 px-5 rounded-xl border border-[var(--border)] text-sm font-medium hover:bg-[var(--surface-hover)] transition-colors cursor-pointer"
         >
           Cancel
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="primary"
           type="submit"
           disabled={loading}
           className="h-11 px-6 rounded-xl bg-[var(--brand)] text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer"
         >
           {loading && <Loader2 size={16} className="animate-spin" />}
           {developer ? "Save Changes" : "Create Developer"}
-        </button>
+        </Button>
       </div>
     </form>
   );

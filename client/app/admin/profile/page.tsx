@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { UserCheck, Lock, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
-import AdminHeader from "../../../components/admin/AdminHeader";
+import AdminPageHeader from "../../../components/admin/AdminPageHeader";
 import Input from "../../../components/ui/store/Input";
 import Label from "../../../components/ui/store/Label";
 import { useProfile } from "../../../hooks/useProfile";
+import Button from "@/components/ui/store/Button";
 
 export default function AdminProfilePage() {
   const { profile, loading, error, updateProfile, changePassword } = useProfile();
@@ -81,14 +82,13 @@ export default function AdminProfilePage() {
   };
 
   return (
-    <div>
-      <AdminHeader
-        onOpenSidebar={() => {}}
+    <div className="p-4 sm:p-8 space-y-8 max-w-5xl mx-auto">
+      {/* ── Top Page Header Banner ─────────────────────────── */}
+      <AdminPageHeader
+        icon={UserCheck}
         title="Profile Settings"
-        subtitle="Manage your administrative credentials and security settings"
+        subtitle="Manage your administrative credentials and security settings."
       />
-
-      <div className="p-4 sm:p-8 space-y-8 max-w-4xl mx-auto">
         {loading ? (
           <div className="p-16 flex flex-col items-center justify-center gap-3 border border-[var(--border)] rounded-2xl bg-[var(--surface)]">
             <Loader2 className="animate-spin text-[var(--brand)]" size={32} />
@@ -153,14 +153,15 @@ export default function AdminProfilePage() {
                 </div>
 
                 <div className="pt-2">
-                  <button
+                  <Button
+                    variant="primary"
                     type="submit"
                     disabled={profileLoading}
-                    className="h-11 px-5 rounded-xl bg-[var(--brand)] text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-sm shadow-[var(--brand)]/20"
+                    className="h-11 px-5"
                   >
                     {profileLoading && <Loader2 size={16} className="animate-spin" />}
                     Save Profile Changes
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
@@ -230,20 +231,20 @@ export default function AdminProfilePage() {
                 </div>
 
                 <div className="pt-2">
-                  <button
+                  <Button
+                    variant="primary"
                     type="submit"
                     disabled={passwordLoading}
-                    className="h-11 px-5 rounded-xl bg-[var(--brand)] text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-sm shadow-[var(--brand)]/20"
+                    className="h-11 px-5"
                   >
                     {passwordLoading && <Loader2 size={16} className="animate-spin" />}
                     Update Password
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
           </div>
         )}
       </div>
-    </div>
   );
 }

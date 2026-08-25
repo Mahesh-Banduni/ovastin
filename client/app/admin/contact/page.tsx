@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Inbox, Trash2, Mail, Phone, Clock, Eye, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
-import AdminHeader from "../../../components/admin/AdminHeader";
 import {
   Table,
   TableHeader,
@@ -13,7 +12,10 @@ import {
 } from "../../../components/ui/store/Table";
 import Modal from "../../../components/ui/store/Modal";
 import Pagination from "../../../components/ui/store/Pagination";
+import AdminPageHeader from "../../../components/admin/AdminPageHeader";
 import { useContact, ContactSubmission } from "../../../hooks/useContact";
+import Button from "@/components/ui/store/Button";
+import Tabs from "@/components/ui/store/Tabs";
 
 export default function AdminContactPage() {
   const {
@@ -58,47 +60,21 @@ export default function AdminContactPage() {
   const totalPages = Math.ceil(total / pageSize) || 1;
 
   return (
-    <div>
-      <AdminHeader
-        onOpenSidebar={() => {}}
+    <div className="p-4 sm:p-8 space-y-6 max-w-7xl mx-auto">
+      {/* ── Top Page Header Banner ─────────────────────────── */}
+      <AdminPageHeader
+        icon={Inbox}
         title="Contact Form Submissions"
-        subtitle="Review client inquiries, property requests, and consultation leads"
+        subtitle="Review client inquiries, property requests, and consultation leads."
+        count={total}
+        countLabel="total"
       />
-
-      <div className="p-4 sm:p-8 space-y-6 max-w-7xl mx-auto">
         {/* Status Filter Tabs */}
-        <div className="flex items-center gap-2 pb-2">
-          <button
-            onClick={() => setIsReadFilter(undefined)}
-            className={`px-4 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
-              isReadFilter === undefined
-                ? "bg-[var(--brand)] text-white"
-                : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]"
-            }`}
-          >
-            All Inquiries
-          </button>
-          <button
-            onClick={() => setIsReadFilter(false)}
-            className={`px-4 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
-              isReadFilter === false
-                ? "bg-[var(--brand)] text-white"
-                : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]"
-            }`}
-          >
-            Unread Only
-          </button>
-          <button
-            onClick={() => setIsReadFilter(true)}
-            className={`px-4 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
-              isReadFilter === true
-                ? "bg-[var(--brand)] text-white"
-                : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]"
-            }`}
-          >
-            Read Only
-          </button>
-        </div>
+        <Tabs
+          tabs={[{ label: "All Inquiries", value: "all" }, { label: "Unread Only", value: "unread" }, { label: "Read Only", value: "read" }]}
+          active={isReadFilter === undefined ? "all" : isReadFilter ? "read" : "unread"}
+          onChange={(value) => setIsReadFilter(value === "all" ? undefined : value === "read")}
+        />
 
         {/* Content Section */}
         {loading ? (
@@ -191,20 +167,20 @@ export default function AdminContactPage() {
 
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1.5">
-                          <button
+                          <Button variant="ghost"
                             onClick={() => handleOpenDetail(sub)}
                             title="View Full Message"
-                            className="p-2 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+                            className="h-8 w-8 p-2 text-[var(--text-secondary)]"
                           >
                             <Eye size={16} />
-                          </button>
-                          <button
+                          </Button>
+                          <Button variant="ghost"
                             onClick={() => setDeleteId(sub.id)}
                             title="Delete Inquiry"
-                            className="p-2 rounded-lg hover:bg-[var(--destructive)]/10 text-[var(--text-secondary)] hover:text-[var(--destructive)] transition-colors cursor-pointer"
+                            className="h-8 w-8 p-2 text-[var(--text-secondary)] hover:text-[var(--destructive)]"
                           >
-                            <Trash2 size={16} />
-                          </button>
+                            <Trash2 size={16} style={{ color: "var(--text-primary)" }} />
+                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -226,7 +202,6 @@ export default function AdminContactPage() {
             )}
           </div>
         )}
-      </div>
 
       {/* View Message Detail Modal */}
       <Modal open={!!activeSubmission} onClose={() => setActiveSubmission(null)}>
@@ -262,24 +237,24 @@ export default function AdminContactPage() {
             </div>
 
             <div className="flex items-center justify-between pt-3 border-t border-[var(--border)]">
-              <button
+              <Button variant="danger"
                 type="button"
                 onClick={() => {
                   setDeleteId(activeSubmission.id);
                 }}
-                className="text-xs text-[var(--destructive)] hover:underline flex items-center gap-1.5 cursor-pointer"
+                className="h-8 px-2 text-xs text-[var(--destructive)]"
               >
                 <Trash2 size={14} />
                 Delete Submission
-              </button>
+              </Button>
 
-              <button
+              <Button variant="outline"
                 type="button"
                 onClick={() => setActiveSubmission(null)}
-                className="h-10 px-5 rounded-xl border border-[var(--border)] text-sm font-medium hover:bg-[var(--surface-hover)] cursor-pointer"
+                className="h-10 px-5"
               >
                 Close
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -295,21 +270,21 @@ export default function AdminContactPage() {
             Are you sure you want to permanently delete this contact inquiry?
           </p>
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-[var(--border)]">
-            <button
+            <Button variant="outline"
               onClick={() => setDeleteId(null)}
               disabled={deleting}
-              className="h-10 px-4 rounded-xl border border-[var(--border)] text-sm font-medium hover:bg-[var(--surface-hover)]"
+              className="h-10 px-4"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button variant="danger"
               onClick={handleDeleteConfirm}
               disabled={deleting}
-              className="h-10 px-5 rounded-xl bg-[var(--destructive)] text-white text-sm font-medium hover:opacity-90 flex items-center gap-2 cursor-pointer"
+              className="h-10 px-5"
             >
               {deleting && <Loader2 size={16} className="animate-spin" />}
               Delete
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import {
   Building2,
@@ -17,6 +17,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Sidebar from "../ui/store/Sidebar";
+import Button from "@/components/ui/store/Button";
+import Image from "next/image";
 
 interface AdminSidebarProps {
   open: boolean;
@@ -46,6 +48,7 @@ const navGroups = [
 export default function AdminSidebar({ open, onOpenChange }: AdminSidebarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const router = useRouter();
 
   const isActive = (href: string) =>
     href !== "/admin"
@@ -57,24 +60,10 @@ export default function AdminSidebar({ open, onOpenChange }: AdminSidebarProps) 
       <div className="flex h-full flex-col">
 
         {/* ── Brand Header ──────────────────────────────────── */}
-        <div className="px-5 pt-6 pb-5 border-b border-[var(--border)]">
-          <Link href="/admin" className="flex items-center gap-3 group">
-            {/* Icon */}
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm flex-shrink-0 transition-transform duration-200 group-hover:scale-105"
-              style={{ background: "linear-gradient(135deg, var(--brand) 0%, var(--brand-foreground) 160%)" }}
-            >
-              <LayoutDashboard size={17} style={{ color: "var(--background)" }} />
+        <div className="px-6 py-6 border-b border-[var(--border)]">
+            <div onClick={()=>router.push("/admin")} className="cursor-pointer relative h-10 w-full min-w-30 flex items-center justify-center">
+                <Image src="/images/logo/ovastin-logo.svg" alt="Ovastin Logo" loading="eager" fill className="object-cover" />
             </div>
-            <div>
-              <div className="font-bold text-base tracking-tight text-[var(--text-primary)] leading-none">
-                Ovastin<span className="text-[var(--brand)]">.</span>
-              </div>
-              <div className="text-[10px] font-semibold tracking-widest text-[var(--text-muted)] uppercase mt-0.5">
-                Admin Portal
-              </div>
-            </div>
-          </Link>
         </div>
 
         {/* ── Navigation ────────────────────────────────────── */}
@@ -169,13 +158,14 @@ export default function AdminSidebar({ open, onOpenChange }: AdminSidebarProps) 
                 {session?.user?.email || "admin@example.com"}
               </div>
             </div>
-            <button
+            <Button
+              variant="ghost"
               onClick={() => signOut({ callbackUrl: "/signin" })}
               title="Sign Out"
               className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--destructive)] hover:bg-[var(--destructive)]/10 transition-all duration-200 cursor-pointer flex-shrink-0"
             >
               <LogOut size={14} />
-            </button>
+            </Button>
           </div>
         </div>
       </div>

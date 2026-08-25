@@ -1,15 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Edit2, Trash2, Briefcase, Loader2, Check, X, Search } from "lucide-react";
-import AdminHeader from "../../../components/admin/AdminHeader";
+import { Plus, Edit2, Trash2, Briefcase, Loader2, Check, X } from "lucide-react";
 import {
   Table, TableHeader, TableBody, TableRow, TableHead, TableCell,
 } from "../../../components/ui/store/Table";
 import Modal from "../../../components/ui/store/Modal";
 import Pagination from "../../../components/ui/store/Pagination";
 import ServiceForm from "../../../components/admin/forms/ServiceForm";
+import AdminPageHeader from "../../../components/admin/AdminPageHeader";
 import { useServices, ServiceItem } from "../../../hooks/useServices";
+import Button from "@/components/ui/store/Button";
+import SearchInput from "@/components/ui/store/SearchInput";
 
 export default function AdminServicesPage() {
   const {
@@ -21,7 +23,6 @@ export default function AdminServicesPage() {
   const [editingService, setEditingService] = useState<ServiceItem | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleOpenCreate = () => { setEditingService(null); setFormModalOpen(true); };
   const handleOpenEdit = (service: ServiceItem) => { setEditingService(service); setFormModalOpen(true); };
@@ -41,77 +42,32 @@ export default function AdminServicesPage() {
   };
 
   const totalPages = Math.ceil(total / pageSize) || 1;
-  const activeCount = services.filter((s) => s.isActive).length;
 
   return (
-    <div>
-      <AdminHeader
-        onOpenSidebar={() => setSidebarOpen(true)}
+    <div className="p-4 sm:p-6 space-y-6 max-w-[1400px] mx-auto">
+      {/* ── Top Page Header Banner (as shown in reference) ────── */}
+      <AdminPageHeader
+        icon={Briefcase}
         title="Services"
-        subtitle="Manage architectural, design, advisory, and property consulting services"
+        subtitle="Manage architectural, design, advisory, and property consulting services."
+        count={total}
+        countLabel="total"
         action={
-          <button
-            onClick={handleOpenCreate}
-            className="h-9 px-4 rounded-xl text-sm font-semibold flex items-center gap-2 cursor-pointer transition-all duration-200 active:scale-[0.98]"
-            style={{
-              background: "linear-gradient(135deg, var(--brand) 0%, var(--brand-foreground) 160%)",
-              color: "var(--background)",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-            }}
-          >
-            <Plus size={16} />
-            <span className="hidden sm:inline">Add Service</span>
-          </button>
+          <Button variant="primary" onClick={handleOpenCreate}>
+            <Plus size={16} strokeWidth={2.25} />
+            <span>Add Service</span>
+          </Button>
         }
       />
 
-      <div className="p-4 sm:p-6 space-y-5 max-w-[1400px] mx-auto">
-
-        {/* ── Stats Strip ─────────────────────────────────────── */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {[
-            { label: "Total Services", value: total, color: "var(--brand)" },
-            { label: "Active", value: activeCount, color: "#10b981" },
-            { label: "Inactive", value: total - activeCount, color: "#71717a" },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="flex items-center gap-3 p-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]"
-            >
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ background: `${stat.color}18` }}
-              >
-                <Briefcase size={17} style={{ color: stat.color }} />
-              </div>
-              <div>
-                <div className="text-xl font-bold text-[var(--text-primary)] leading-tight">{stat.value}</div>
-                <div className="text-[11px] text-[var(--text-muted)]">{stat.label}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
         {/* ── Search Bar ──────────────────────────────────────── */}
-        <div className="relative max-w-sm">
-          <span className="absolute inset-y-0 left-3.5 flex items-center text-[var(--text-muted)] pointer-events-none">
-            <Search size={16} />
-          </span>
-          <input
-            type="text"
+        <div className="max-w-sm">
+          <SearchInput
             placeholder="Search services by name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full h-10 pl-10 pr-10 rounded-xl border border-[var(--border)] bg-[var(--background)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--brand)] focus:ring-2 focus:ring-[var(--brand)]/20 transition-all"
+            onClear={() => setSearch("")}
           />
-          {search && (
-            <button
-              onClick={() => setSearch("")}
-              className="absolute inset-y-0 right-3 flex items-center text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
-            >
-              <X size={15} />
-            </button>
-          )}
         </div>
 
         {/* ── Content ─────────────────────────────────────────── */}
@@ -141,13 +97,13 @@ export default function AdminServicesPage() {
             <p className="text-sm text-[var(--text-muted)] mt-1.5 max-w-xs mx-auto">
               Add the services you offer to showcase on the client website.
             </p>
-            <button
+            <Button
+              variant="primary"
               onClick={handleOpenCreate}
-              className="mt-5 h-10 px-5 rounded-xl text-sm font-semibold inline-flex items-center gap-2 cursor-pointer transition-all"
-              style={{ background: "linear-gradient(135deg, var(--brand) 0%, var(--brand-foreground) 160%)", color: "var(--background)" }}
+              className="mt-5"
             >
               <Plus size={16} /> Add Service
-            </button>
+            </Button>
           </div>
         ) : (
           <div className="space-y-4">
@@ -207,21 +163,23 @@ export default function AdminServicesPage() {
                     </TableCell>
 
                     <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <button
+                      <div className="flex items-center justify-end gap-1.5">
+                        <Button
+                          variant="outline"
                           onClick={() => handleOpenEdit(service)}
                           title="Edit"
-                          className="p-2 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
+                          className="h-8 w-8 p-2"
                         >
-                          <Edit2 size={15} />
-                        </button>
-                        <button
+                          <Edit2 size={15}/>
+                        </Button>
+                        <Button
+                          variant="danger"
                           onClick={() => setDeleteId(service.id)}
                           title="Delete"
-                          className="p-2 rounded-lg hover:bg-[var(--destructive)]/10 text-[var(--text-muted)] hover:text-[var(--destructive)] transition-all cursor-pointer"
+                          className="h-8 w-8 p-2"
                         >
-                          <Trash2 size={15} />
-                        </button>
+                          <Trash2 size={15}/>
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -241,7 +199,6 @@ export default function AdminServicesPage() {
             )}
           </div>
         )}
-      </div>
 
       {/* ── Modals ──────────────────────────────────────────── */}
 
@@ -259,21 +216,23 @@ export default function AdminServicesPage() {
             Are you sure you want to remove this service? This action cannot be undone.
           </p>
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-[var(--border)]">
-            <button
+            <Button
+              variant="outline"
               onClick={() => setDeleteId(null)}
               disabled={deleting}
-              className="h-9 px-4 rounded-xl border border-[var(--border)] text-sm font-medium hover:bg-[var(--surface-hover)] cursor-pointer transition-colors"
+              className="h-9 px-4"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="danger"
               onClick={handleDeleteConfirm}
               disabled={deleting}
-              className="h-9 px-5 rounded-xl bg-[var(--destructive)] text-white text-sm font-semibold hover:opacity-90 flex items-center gap-2 cursor-pointer transition-all"
+              className="h-9 px-5"
             >
               {deleting && <Loader2 size={14} className="animate-spin" />}
               Delete Service
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>

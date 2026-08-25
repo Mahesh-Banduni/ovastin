@@ -4,10 +4,13 @@ import { useState, useEffect } from "react";
 import Input from "../../ui/store/Input";
 import Label from "../../ui/store/Label";
 import Textarea from "../../ui/store/TextArea";
+import { ImageUpload } from "../ImageUpload";
 import { Project } from "../../../hooks/useProjects";
 import { useDevelopers } from "../../../hooks/useDevelopers";
 import { useAmenities } from "../../../hooks/useAmenities";
 import { Loader2 } from "lucide-react";
+import Button from "@/components/ui/store/Button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/store/Select";
 
 interface ProjectFormProps {
   project?: Project | null;
@@ -16,24 +19,24 @@ interface ProjectFormProps {
 }
 
 const PROPERTY_TYPES = [
-  "APARTMENT",
-  "VILLA",
-  "PLOT",
-  "TOWNSHIP",
-  "COMMERCIAL",
-  "OFFICE",
-  "RETAIL",
-  "INDUSTRIAL",
-  "OTHER",
+  { title: "Apartment", value: "APARTMENT" },
+  { title: "Villa", value: "VILLA" },
+  { title: "Plot", value: "PLOT" },
+  { title: "Township", value: "TOWNSHIP" },
+  { title: "Commercial", value: "COMMERCIAL" },
+  { title: "Office", value: "OFFICE" },
+  { title: "Retail", value: "RETAIL" },
+  { title: "Industrial", value: "INDUSTRIAL" },
+  { title: "Other", value: "OTHER" },
 ];
 
 const PROJECT_STATUSES = [
-  "DRAFT",
-  "UPCOMING",
-  "ACTIVE",
-  "SOLD_OUT",
-  "COMPLETED",
-  "ARCHIVED",
+  { title: "Draft", value: "DRAFT" },
+  { title: "Upcoming", value: "UPCOMING" },
+  { title: "Active", value: "ACTIVE" },
+  { title: "Sold Out", value: "SOLD_OUT" },
+  { title: "Completed", value: "COMPLETED" },
+  { title: "Archived", value: "ARCHIVED" },
 ];
 
 export default function ProjectForm({ project, onSubmit, onCancel }: ProjectFormProps) {
@@ -120,7 +123,7 @@ export default function ProjectForm({ project, onSubmit, onCancel }: ProjectForm
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-h-[80vh] overflow-y-auto pr-1 scrollbar-hide">
+    <form onSubmit={handleSubmit} className="space-y-6 max-h-[80vh] overflow-y-auto scrollbar-hide">
       <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
         <h2 className="text-lg font-semibold text-[var(--text-primary)]">
           {project ? "Edit Project" : "Create New Project"}
@@ -157,48 +160,33 @@ export default function ProjectForm({ project, onSubmit, onCancel }: ProjectForm
 
         <div className="space-y-1.5">
           <Label required>Property Type</Label>
-          <select
-            value={propertyType}
-            onChange={(e) => setPropertyType(e.target.value as any)}
-            className="w-full h-12 px-4 rounded-lg border bg-[var(--background)] border-[var(--border)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--brand)]"
-          >
-            {PROPERTY_TYPES.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
+          <Select value={propertyType} onValueChange={(value: string) => setPropertyType(value as any)}>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {PROPERTY_TYPES.map((type, index) => <SelectItem key={index} value={type.value}>{type.title}</SelectItem>)}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-1.5">
           <Label required>Status</Label>
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value as any)}
-            className="w-full h-12 px-4 rounded-lg border bg-[var(--background)] border-[var(--border)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--brand)]"
-          >
-            {PROJECT_STATUSES.map((st) => (
-              <option key={st} value={st}>
-                {st}
-              </option>
-            ))}
-          </select>
+          <Select value={status} onValueChange={(value: string) => setStatus(value as any)}>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {PROJECT_STATUSES.map((st, index) => <SelectItem key={index} value={st.value}>{st.title}</SelectItem>)}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-1.5">
           <Label>Developer / Builder</Label>
-          <select
-            value={developerId}
-            onChange={(e) => setDeveloperId(e.target.value)}
-            className="w-full h-12 px-4 rounded-lg border bg-[var(--background)] border-[var(--border)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--brand)]"
-          >
-            <option value="">-- None Selected --</option>
-            {developers.map((dev) => (
-              <option key={dev.id} value={dev.id}>
-                {dev.name}
-              </option>
-            ))}
-          </select>
+          <Select value={developerId || "none"} onValueChange={(value: string) => setDeveloperId(value === "none" ? "" : value)}>
+            <SelectTrigger><SelectValue placeholder="-- None Selected --" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">-- None Selected --</SelectItem>
+              {developers.map((dev) => <SelectItem key={dev.id} value={dev.id}>{dev.name}</SelectItem>)}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-1.5">
@@ -280,12 +268,12 @@ export default function ProjectForm({ project, onSubmit, onCancel }: ProjectForm
       </div>
 
       <div className="space-y-1.5">
-        <Label>Cover Image URL</Label>
-        <Input
-          type="url"
+        <ImageUpload
+          label="Project Cover Image"
           value={coverImage}
-          onChange={(e) => setCoverImage(e.target.value)}
-          placeholder="https://images.unsplash.com/..."
+          onChange={(val) => setCoverImage(val || "")}
+          maxFiles={1}
+          description="Upload primary cover photograph for this property development"
         />
       </div>
 
@@ -310,10 +298,9 @@ export default function ProjectForm({ project, onSubmit, onCancel }: ProjectForm
                   key={amenity.id}
                   className={`
                     flex items-center gap-2 p-2 rounded-lg text-xs font-medium cursor-pointer transition-colors border
-                    ${
-                      isSelected
-                        ? "border-[var(--brand)] bg-[var(--brand)]/10 text-[var(--text-primary)]"
-                        : "border-[var(--border)] bg-[var(--background)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]"
+                    ${isSelected
+                      ? "border-[var(--brand)] bg-[var(--brand)]/10 text-[var(--text-primary)]"
+                      : "border-[var(--border)] bg-[var(--background)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]"
                     }
                   `}
                 >
@@ -333,22 +320,24 @@ export default function ProjectForm({ project, onSubmit, onCancel }: ProjectForm
 
       {/* Form Buttons */}
       <div className="flex items-center justify-end gap-3 pt-4 border-t border-[var(--border)]">
-        <button
+        <Button
+          variant="outline"
           type="button"
           onClick={onCancel}
           disabled={loading}
           className="h-11 px-5 rounded-xl border border-[var(--border)] text-sm font-medium hover:bg-[var(--surface-hover)] transition-colors cursor-pointer"
         >
           Cancel
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="primary"
           type="submit"
           disabled={loading}
           className="h-11 px-6 rounded-xl bg-[var(--brand)] text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer"
         >
           {loading && <Loader2 size={16} className="animate-spin" />}
           {project ? "Save Changes" : "Create Project"}
-        </button>
+        </Button>
       </div>
     </form>
   );
