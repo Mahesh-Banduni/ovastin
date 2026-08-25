@@ -44,9 +44,7 @@ export async function createApp() {
     origin: [
       "*"
     ],
-
     credentials: true,
-
     methods: [
       "GET",
       "POST",
@@ -55,7 +53,6 @@ export async function createApp() {
       "DELETE",
       "OPTIONS"
     ],
-
     allowedHeaders: [
       "Authorization",
       "Content-Type",

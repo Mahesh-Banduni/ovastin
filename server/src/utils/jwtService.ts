@@ -21,7 +21,7 @@ export class JwtService {
       payload,
       config.jwt.accessSecret,
       {
-        expiresIn: "15m"
+        expiresIn: "24h"
       }
     );
   }
