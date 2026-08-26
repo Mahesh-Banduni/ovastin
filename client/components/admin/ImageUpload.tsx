@@ -11,7 +11,6 @@ import {
   Eye,
   Trash2,
 } from "lucide-react";
-import Image from "next/image";
 import Button from "@/components/ui/store/Button";
 import Modal from "@/components/ui/store/Modal";
 
@@ -35,6 +34,8 @@ interface ImageUploadProps {
   maxFiles?: number;
   label?: string;
   description?: string;
+  /** When true, all upload/remove interactions are disabled. */
+  disabled?: boolean;
 }
 
 export function ImageUpload({
@@ -43,6 +44,7 @@ export function ImageUpload({
   maxFiles = 1,
   label,
   description,
+  disabled = false,
 }: ImageUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -91,6 +93,7 @@ export function ImageUpload({
 
   const handleFiles = async (files: FileList | File[]) => {
     setErrorMessage(null);
+    if (disabled) return;
     const fileArray = Array.from(files);
 
     const validFiles = fileArray.filter((file) => {
@@ -163,6 +166,7 @@ export function ImageUpload({
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
+    if (disabled) return;
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       handleFiles(e.dataTransfer.files);
     }
@@ -170,6 +174,7 @@ export function ImageUpload({
 
   const removeImage = (index: number) => {
     setErrorMessage(null);
+    if (disabled) return;
     if (maxFiles === 1 && (typeof value === "string" || !Array.isArray(value))) {
       onChange("");
       return;
@@ -190,6 +195,7 @@ export function ImageUpload({
 
   const handleAddManualUrl = (e: React.FormEvent) => {
     e.preventDefault();
+    if (disabled) return;
     if (!manualUrl.trim()) return;
 
     const url = manualUrl.trim();
@@ -247,8 +253,12 @@ export function ImageUpload({
           <label className="text-xs font-semibold text-[var(--text-primary)]">{label}</label>
           <button
             type="button"
-            onClick={() => setShowUrlInput(!showUrlInput)}
-            className="text-[11px] text-[var(--brand)] hover:underline inline-flex items-center gap-1 cursor-pointer"
+            onClick={() => {
+              if (!disabled) setShowUrlInput(!showUrlInput);
+            }}
+            className={`text-[11px] text-[var(--brand)] hover:underline inline-flex items-center gap-1 ${
+              disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+            }`}
           >
             <LinkIcon size={12} />
             {showUrlInput ? "Hide URL input" : "Paste Image URL"}
@@ -285,15 +295,20 @@ export function ImageUpload({
         <div
           onDragOver={(e) => {
             e.preventDefault();
-            setIsDragging(true);
+            if (!disabled) setIsDragging(true);
           }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
-          onClick={() => inputRef.current?.click()}
-          className={`flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 text-center cursor-pointer transition-all duration-200 ${
-            isDragging
-              ? "border-[var(--brand)] bg-[var(--brand)]/5 scale-[0.99]"
-              : "border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-hover)] hover:border-[var(--brand)]/50"
+          onClick={() => {
+            if (!disabled) inputRef.current?.click();
+          }}
+          className={`flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 text-center transition-all duration-200 ${
+            disabled
+              ? "border-[var(--border)] bg-[var(--surface)] opacity-60 cursor-not-allowed"
+              : `cursor-pointer ${isDragging
+                ? "border-[var(--brand)] bg-[var(--brand)]/5 scale-[0.99]"
+                : "border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-hover)] hover:border-[var(--brand)]/50"
+              }`
           }`}
         >
           <div
@@ -383,15 +398,21 @@ export function ImageUpload({
             <div
               onDragOver={(e) => {
                 e.preventDefault();
-                setIsDragging(true);
+                if (!disabled) setIsDragging(true);
               }}
               onDragLeave={() => setIsDragging(false)}
               onDrop={handleDrop}
-              onClick={() => inputRef.current?.click()}
-              className={`flex flex-col items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-2 border-dashed transition-all cursor-pointer ${
-                isDragging
-                  ? "border-[var(--brand)] bg-[var(--brand)]/10"
-                  : "border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-hover)] hover:border-[var(--brand)]"
+              onClick={() => {
+                if (!disabled) inputRef.current?.click();
+              }}
+              className={`flex flex-col items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-2 border-dashed transition-all ${
+                disabled
+                  ? "border-[var(--border)] bg-[var(--surface)] opacity-60 cursor-not-allowed"
+                  : `cursor-pointer ${
+                      isDragging
+                        ? "border-[var(--brand)] bg-[var(--brand)]/10"
+                        : "border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-hover)] hover:border-[var(--brand)]"
+                    }`
               }`}
             >
               <ImagePlus size={20} className="text-[var(--text-muted)]" />

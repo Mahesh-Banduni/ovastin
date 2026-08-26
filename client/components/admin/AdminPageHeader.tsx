@@ -24,16 +24,17 @@ export default function AdminPageHeader({
     <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div className="flex items-center gap-4 min-w-0">
         {Icon && (
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{
-              background: "linear-gradient(135deg, var(--brand) 0%, var(--brand-foreground) 160%)",
-              color: "var(--background)",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-            }}
-          >
-            <Icon size={22} />
-          </div>
+        <div
+          className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl"
+          style={{
+            background:
+              "linear-gradient(135deg, var(--brand) 0%, var(--secondary) 140%)",
+            color: "var(--background)",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+          }}
+        >
+          <Icon size={21} strokeWidth={2} />
+        </div>
         )}
         <div className="min-w-0">
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--text-primary)] truncate">

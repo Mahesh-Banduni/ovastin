@@ -92,15 +92,6 @@ export default function Sidebar({
             borderColor,
           }}
         >
-          {/* Close Button — mobile only */}
-          <button
-            type="button"
-            className="absolute right-3 top-3 cursor-pointer rounded-lg p-1.5 transition-colors hover:bg-[var(--surface-hover)] lg:hidden"
-            style={{ color: textColor }}
-            onClick={() => onOpenChange(false)}
-          >
-            <X size={18} />
-          </button>
 
           {children}
         </aside>

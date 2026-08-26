@@ -10,13 +10,15 @@ export async function apiFetch<T = any>(
   const session = await getSession();
   const token = (session as any)?.accessToken;
 
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-    ...(options.headers as Record<string, string>)
-  };
+  const headers = new Headers(options.headers);
+  const hasBody = options.body !== undefined && options.body !== null && options.body !== "";
+
+  if (hasBody && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
 
   if (token) {
-    (headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
+    headers.set("Authorization", `Bearer ${token}`);
   }
 
   const res = await fetch(`${API_URL}${path}`, {
@@ -24,7 +26,8 @@ export async function apiFetch<T = any>(
     headers
   });
 
-  const data = await res.json();
+  const responseText = await res.text();
+  const data = responseText ? JSON.parse(responseText) : null;
 
   if (!res.ok) {
     throw new ApiClientError(

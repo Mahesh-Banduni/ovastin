@@ -27,6 +27,7 @@ export default function Modal({
     >
       <div
         className="
+        relative
         w-full
         max-w-xl
         rounded-xl

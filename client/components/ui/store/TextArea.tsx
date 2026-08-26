@@ -7,6 +7,7 @@ export default function Textarea(
       className="
       min-h-[140px]
       w-full
+      text-sm
       rounded-lg
       border
       border-[var(--border)]

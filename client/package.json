@@ -10,14 +10,18 @@
     "ngrok": "ngrok http --url=tiara-reconcile-clapped.ngrok-free.dev 3000"
   },
   "dependencies": {
+    "k6": "^0.0.0",
     "lucide-react": "^1.21.0",
     "next": "^16.2.12",
     "next-auth": "^4.24.15",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
+    "@types/k6": "^2.2.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

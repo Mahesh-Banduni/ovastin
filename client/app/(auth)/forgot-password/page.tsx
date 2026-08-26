@@ -8,7 +8,14 @@ import {
 } from "lucide-react";
 import Input from "../../../components/ui/store/Input";
 import Label from "../../../components/ui/store/Label";
+import FieldError from "../../../components/ui/store/FieldError";
 import { apiFetch } from "../../../lib/api";
+import {
+  forgotPasswordFormSchema,
+  resetPasswordWithConfirmSchema,
+  validateForm,
+  type FieldErrors,
+} from "@/lib/validation";
 
 const STEPS = [
   { id: 1, label: "Email" },
@@ -24,19 +31,39 @@ export default function ForgotPasswordPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+
+  /** Clears a single field's inline error once the user edits it again. */
+  const clearFieldError = (field: string) =>
+    setFieldErrors((prev) =>
+      prev[field] ? { ...prev, [field]: undefined } : prev
+    );
 
   const handleRequestOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setFieldErrors({});
+
+    // Validate against the backend-mirrored Zod schema before requesting.
+    const result = validateForm(forgotPasswordFormSchema, { email });
+    if (!result.success) {
+      setFieldErrors(result.errors);
+      return;
+    }
+
     setLoading(true);
     try {
       await apiFetch("/api/v1/auth/forgot-password", {
         method: "POST",
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: result.data.email }),
       });
       setStep(2);
-    } catch (err: any) {
-      setError(err?.message || "Failed to send reset code. Please try again.");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to send reset code. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -45,23 +72,37 @@ export default function ForgotPasswordPage() {
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
+    setFieldErrors({});
+
+    // Validate against the backend-mirrored Zod schema (+ confirm password).
+    const result = validateForm(resetPasswordWithConfirmSchema, {
+      email,
+      otp,
+      newPassword,
+      confirmPassword,
+    });
+    if (!result.success) {
+      setFieldErrors(result.errors);
       return;
     }
-    if (newPassword.length < 8) {
-      setError("Password must be at least 8 characters long.");
-      return;
-    }
+
     setLoading(true);
     try {
       await apiFetch("/api/v1/auth/reset-password", {
         method: "POST",
-        body: JSON.stringify({ email, otp, newPassword }),
+        body: JSON.stringify({
+          email: result.data.email,
+          otp: result.data.otp,
+          newPassword: result.data.newPassword,
+        }),
       });
       setStep(3);
-    } catch (err: any) {
-      setError(err?.message || "Invalid or expired OTP. Please try again.");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Invalid or expired OTP. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -127,7 +168,7 @@ export default function ForgotPasswordPage() {
         </h1>
         <p className="mt-1.5 text-sm text-[var(--text-muted)]">
           {step === 1 && "Enter your email and we'll send a one-time code"}
-          {step === 2 && `We sent a 6-digit code to ${email}`}
+          {step === 2 && `We sent a code to ${email}`}
           {step === 3 && "Your password has been successfully updated"}
         </p>
       </div>
@@ -147,25 +188,31 @@ export default function ForgotPasswordPage() {
       {step === 1 && (
         <form
           onSubmit={handleRequestOtp}
+          noValidate
           className="space-y-5"
           style={{ animation: "slideStepIn 0.3s ease both" }}
         >
           <div className="space-y-1.5">
-            <Label required>Account Email</Label>
+            <Label htmlFor="account-email">Account Email<span className="text-red-500 ml-scale-sm-0.75">*</span></Label>
             <div className="relative">
               <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-[var(--text-muted)]">
                 <Mail size={17} />
               </span>
               <Input
+                id="account-email"
                 type="email"
                 placeholder="admin@example.com"
-                required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                aria-invalid={!!fieldErrors.email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  clearFieldError("email");
+                }}
                 className="pl-10"
                 disabled={loading}
               />
             </div>
+            <FieldError message={fieldErrors.email} />
           </div>
 
           <SubmitButton loading={loading} loadingText="Sending code...">
@@ -178,27 +225,33 @@ export default function ForgotPasswordPage() {
       {step === 2 && (
         <form
           onSubmit={handleResetPassword}
+          noValidate
           className="space-y-5"
           style={{ animation: "slideStepIn 0.3s ease both" }}
         >
           {/* OTP */}
           <div className="space-y-1.5">
-            <Label required>6-Digit OTP Code</Label>
+            <Label htmlFor="otp-code">OTP Code<span className="text-red-500 ml-scale-sm-0.75">*</span></Label>
             <div className="relative">
               <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-[var(--text-muted)]">
                 <KeyRound size={17} />
               </span>
               <Input
+                id="otp-code"
                 type="text"
                 placeholder="123456"
-                required
                 maxLength={6}
                 value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                aria-invalid={!!fieldErrors.otp}
+                onChange={(e) => {
+                  setOtp(e.target.value.replace(/\D/g, ""));
+                  clearFieldError("otp");
+                }}
                 className="pl-10 tracking-[0.3em] font-mono text-base text-center"
                 disabled={loading}
               />
             </div>
+            <FieldError message={fieldErrors.otp} />
             <p className="text-xs text-[var(--text-muted)]">
               Didn't receive it?{" "}
               <button
@@ -213,40 +266,50 @@ export default function ForgotPasswordPage() {
 
           {/* New Password */}
           <div className="space-y-1.5">
-            <Label required>New Password</Label>
+            <Label htmlFor="new-password">New Password<span className="text-red-500 ml-scale-sm-0.75">*</span></Label>
             <div className="relative">
               <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-[var(--text-muted)]">
                 <Lock size={17} />
               </span>
               <Input
+                id="new-password"
                 type="password"
                 placeholder="Minimum 8 characters"
-                required
                 value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
+                aria-invalid={!!fieldErrors.newPassword}
+                onChange={(e) => {
+                  setNewPassword(e.target.value);
+                  clearFieldError("newPassword");
+                }}
                 className="pl-10"
                 disabled={loading}
               />
             </div>
+            <FieldError message={fieldErrors.newPassword} />
           </div>
 
           {/* Confirm Password */}
           <div className="space-y-1.5">
-            <Label required>Confirm New Password</Label>
+            <Label htmlFor="confirm-new-password">Confirm New Password<span className="text-red-500 ml-scale-sm-0.75">*</span></Label>
             <div className="relative">
               <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-[var(--text-muted)]">
                 <Lock size={17} />
               </span>
               <Input
+                id="confirm-new-password"
                 type="password"
                 placeholder="Re-enter new password"
-                required
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                aria-invalid={!!fieldErrors.confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  clearFieldError("confirmPassword");
+                }}
                 className="pl-10"
                 disabled={loading}
               />
             </div>
+            <FieldError message={fieldErrors.confirmPassword} />
           </div>
 
           <SubmitButton loading={loading} loadingText="Resetting password...">

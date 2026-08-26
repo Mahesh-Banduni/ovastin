@@ -5,12 +5,19 @@ import Input from "../../ui/store/Input";
 import Label from "../../ui/store/Label";
 import Textarea from "../../ui/store/TextArea";
 import { ImageUpload } from "../ImageUpload";
+import FieldError from "../../ui/store/FieldError";
 import { Project } from "../../../hooks/useProjects";
 import { useDevelopers } from "../../../hooks/useDevelopers";
 import { useAmenities } from "../../../hooks/useAmenities";
 import { Loader2 } from "lucide-react";
 import Button from "@/components/ui/store/Button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/store/Select";
+import {
+  projectFormSchema,
+  validateForm,
+  type FieldErrors,
+} from "@/lib/validation";
+import { CloseButton } from "../FormCloseButton";
 
 interface ProjectFormProps {
   project?: Project | null;
@@ -65,7 +72,63 @@ export default function ProjectForm({ project, onSubmit, onCancel }: ProjectForm
   );
 
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!project) {
+      setName("");
+      setSlug("");
+      setStatus("DRAFT");
+      setPropertyType("APARTMENT");
+      setDeveloperId("");
+      setPossessionDate("");
+      setCurrency("INR");
+      setPriceMin("");
+      setPriceMax("");
+      setCity("");
+      setState("");
+      setAddress("");
+      setPostalCode("");
+      setCoverImage("");
+      setDescription("");
+      setSelectedAmenityIds([]);
+      return;
+    }
+  
+    setName(project.name || "");
+    setSlug(project.slug || "");
+    setStatus(project.status || "DRAFT");
+    setPropertyType(project.propertyType || "APARTMENT");
+    setDeveloperId(project.developerId?.toString() || "");
+  
+    setPossessionDate(
+      project.possessionDate
+        ? project.possessionDate.split("T")[0]
+        : ""
+    );
+  
+    setCurrency(project.currency || "INR");
+    setPriceMin(project.priceMin?.toString() || "");
+    setPriceMax(project.priceMax?.toString() || "");
+    setCity(project.city || "");
+    setState(project.state || "");
+    setAddress(project.address || "");
+    setPostalCode(project.postalCode || "");
+    setCoverImage(project.coverImage || "");
+    setDescription(project.description || "");
+  
+    setSelectedAmenityIds(
+      project.amenities?.map((a) => String(a.amenityId)) || []
+    );
+  }, [project]);
+
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+
+  /** Clears a single field's inline error once the user edits it again. */
+  const clearFieldError = (field: string) =>
+    setFieldErrors((prev) =>
+      prev[field] ? { ...prev, [field]: undefined } : prev
+    );
 
   // Auto-generate slug from name if empty or newly typed
   const handleNameChange = (val: string) => {
@@ -92,43 +155,78 @@ export default function ProjectForm({ project, onSubmit, onCancel }: ProjectForm
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setFieldErrors({});
+
+    // Validate against the backend-mirrored Zod schema before submitting.
+    const result = validateForm(projectFormSchema, {
+      name,
+      slug,
+      status,
+      propertyType,
+      currency,
+      developerId,
+      possessionDate,
+      priceMin,
+      priceMax,
+      address,
+      city,
+      state,
+      postalCode,
+      coverImage,
+      description,
+      amenityIds: selectedAmenityIds,
+    });
+    if (!result.success) {
+      setFieldErrors(result.errors);
+      return;
+    }
+
+    const data = result.data;
     setLoading(true);
 
     try {
       const payload: any = {
-        name,
-        slug: slug.trim(),
-        status,
-        propertyType,
-        currency,
-        description: description || undefined,
-        coverImage: coverImage || undefined,
-        address: address || undefined,
-        city: city || undefined,
-        state: state || undefined,
-        postalCode: postalCode || undefined,
-        developerId: developerId || undefined,
-        priceMin: priceMin ? parseFloat(priceMin) : undefined,
-        priceMax: priceMax ? parseFloat(priceMax) : undefined,
-        possessionDate: possessionDate ? new Date(possessionDate).toISOString() : undefined,
-        amenityIds: selectedAmenityIds,
+        name: data.name,
+        slug: data.slug,
+        status: data.status,
+        propertyType: data.propertyType,
+        currency: data.currency || undefined,
+        description: data.description || undefined,
+        coverImage: data.coverImage || undefined,
+        address: data.address || undefined,
+        city: data.city || undefined,
+        state: data.state || undefined,
+        postalCode: data.postalCode || undefined,
+        developerId: data.developerId || undefined,
+        priceMin: data.priceMin === "" ? undefined : parseFloat(data.priceMin),
+        priceMax: data.priceMax === "" ? undefined : parseFloat(data.priceMax),
+        possessionDate: data.possessionDate
+          ? new Date(data.possessionDate).toISOString()
+          : undefined,
+        amenityIds: data.amenityIds,
       };
 
       await onSubmit(payload);
-    } catch (err: any) {
-      setError(err?.message || "Failed to save project");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to save project");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-h-[80vh] overflow-y-auto scrollbar-hide">
+    <form onSubmit={handleSubmit} noValidate className="space-y-6 max-h-[80vh] overflow-y-auto scrollbar-hide">
       <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
         <h2 className="text-lg font-semibold text-[var(--text-primary)]">
           {project ? "Edit Project" : "Create New Project"}
         </h2>
       </div>
+      
+      <CloseButton
+        onCancel={onCancel}
+        title="Close"
+        size={20}
+      />
 
       {error && (
         <div className="rounded-xl border border-[var(--destructive)]/30 bg-[var(--destructive)]/10 p-3 text-sm text-[var(--destructive)]">
@@ -139,29 +237,41 @@ export default function ProjectForm({ project, onSubmit, onCancel }: ProjectForm
       {/* Basic Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <Label required>Project Name</Label>
+          <Label htmlFor="project-name">Project Name<span className="text-red-500 ml-scale-sm-0.75">*</span></Label>
           <Input
-            required
+            id="project-name"
             value={name}
-            onChange={(e) => handleNameChange(e.target.value)}
+            aria-invalid={!!fieldErrors.name}
+            onChange={(e) => {
+              handleNameChange(e.target.value);
+              clearFieldError("name");
+            }}
             placeholder="e.g. Skyline Residences"
+            disabled={loading}
           />
+          <FieldError message={fieldErrors.name} />
         </div>
 
         <div className="space-y-1.5">
-          <Label required>Slug</Label>
+          <Label htmlFor="slug">Slug<span className="text-red-500 ml-scale-sm-0.75">*</span></Label>
           <Input
-            required
+            id="slug"
             value={slug}
-            onChange={(e) => setSlug(e.target.value)}
+            aria-invalid={!!fieldErrors.slug}
+            onChange={(e) => {
+              setSlug(e.target.value);
+              clearFieldError("slug");
+            }}
             placeholder="e.g. skyline-residences"
+            disabled={loading}
           />
+          <FieldError message={fieldErrors.slug} />
         </div>
 
         <div className="space-y-1.5">
-          <Label required>Property Type</Label>
-          <Select value={propertyType} onValueChange={(value: string) => setPropertyType(value as any)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+          <Label htmlFor="property-type">Property Type</Label>
+          <Select value={propertyType} onValueChange={(value: string) => setPropertyType(value as any)} disabled={loading}>
+            <SelectTrigger id="property-type"><SelectValue /></SelectTrigger>
             <SelectContent>
               {PROPERTY_TYPES.map((type, index) => <SelectItem key={index} value={type.value}>{type.title}</SelectItem>)}
             </SelectContent>
@@ -169,9 +279,9 @@ export default function ProjectForm({ project, onSubmit, onCancel }: ProjectForm
         </div>
 
         <div className="space-y-1.5">
-          <Label required>Status</Label>
-          <Select value={status} onValueChange={(value: string) => setStatus(value as any)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+          <Label htmlFor="status">Status</Label>
+          <Select value={status} onValueChange={(value: string) => setStatus(value as any)} disabled={loading}>
+            <SelectTrigger id="status"><SelectValue /></SelectTrigger>
             <SelectContent>
               {PROJECT_STATUSES.map((st, index) => <SelectItem key={index} value={st.value}>{st.title}</SelectItem>)}
             </SelectContent>
@@ -179,117 +289,189 @@ export default function ProjectForm({ project, onSubmit, onCancel }: ProjectForm
         </div>
 
         <div className="space-y-1.5">
-          <Label>Developer / Builder</Label>
-          <Select value={developerId || "none"} onValueChange={(value: string) => setDeveloperId(value === "none" ? "" : value)}>
-            <SelectTrigger><SelectValue placeholder="-- None Selected --" /></SelectTrigger>
+          <Label htmlFor="developer-/-builder">Developer / Builder</Label>
+          <Select value={developerId || "none"} disabled={loading} onValueChange={(value: string) => {
+            setDeveloperId(value === "none" ? "" : value);
+            clearFieldError("developerId");
+          }}>
+            <SelectTrigger id="developer-/-builder"><SelectValue placeholder="-- None Selected --" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="none">-- None Selected --</SelectItem>
               {developers.map((dev) => <SelectItem key={dev.id} value={dev.id}>{dev.name}</SelectItem>)}
             </SelectContent>
           </Select>
+          <FieldError message={fieldErrors.developerId} />
         </div>
 
         <div className="space-y-1.5">
-          <Label>Possession Date</Label>
+          <Label htmlFor="possession-date">Possession Date</Label>
           <Input
+            id="possession-date"
             type="date"
             value={possessionDate}
-            onChange={(e) => setPossessionDate(e.target.value)}
+            aria-invalid={!!fieldErrors.possessionDate}
+            onChange={(e) => {
+              setPossessionDate(e.target.value);
+              clearFieldError("possessionDate");
+            }}
+            disabled={loading}
           />
+          <FieldError message={fieldErrors.possessionDate} />
         </div>
       </div>
 
       {/* Pricing & Location */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="space-y-1.5">
-          <Label>Currency</Label>
+          <Label htmlFor="currency">Currency</Label>
           <Input
+            id="currency"
             value={currency}
-            onChange={(e) => setCurrency(e.target.value)}
+            aria-invalid={!!fieldErrors.currency}
+            onChange={(e) => {
+              setCurrency(e.target.value);
+              clearFieldError("currency");
+            }}
             placeholder="INR, USD"
+            disabled={loading}
           />
+          <FieldError message={fieldErrors.currency} />
         </div>
 
         <div className="space-y-1.5">
-          <Label>Min Price</Label>
+          <Label htmlFor="min-price">Min Price</Label>
           <Input
+            id="min-price"
             type="number"
             value={priceMin}
-            onChange={(e) => setPriceMin(e.target.value)}
+            aria-invalid={!!fieldErrors.priceMin}
+            onChange={(e) => {
+              setPriceMin(e.target.value);
+              clearFieldError("priceMin");
+            }}
             placeholder="e.g. 5000000"
+            disabled={loading}
           />
+          <FieldError message={fieldErrors.priceMin} />
         </div>
 
         <div className="space-y-1.5">
-          <Label>Max Price</Label>
+          <Label htmlFor="max-price">Max Price</Label>
           <Input
+            id="max-price"
             type="number"
             value={priceMax}
-            onChange={(e) => setPriceMax(e.target.value)}
+            aria-invalid={!!fieldErrors.priceMax}
+            onChange={(e) => {
+              setPriceMax(e.target.value);
+              clearFieldError("priceMax");
+            }}
             placeholder="e.g. 15000000"
+            disabled={loading}
           />
+          <FieldError message={fieldErrors.priceMax} />
         </div>
 
         <div className="space-y-1.5">
-          <Label>City</Label>
+          <Label htmlFor="city">City</Label>
           <Input
+            id="city"
             value={city}
-            onChange={(e) => setCity(e.target.value)}
+            aria-invalid={!!fieldErrors.city}
+            onChange={(e) => {
+              setCity(e.target.value);
+              clearFieldError("city");
+            }}
             placeholder="e.g. Mumbai"
+            disabled={loading}
           />
+          <FieldError message={fieldErrors.city} />
         </div>
 
         <div className="space-y-1.5">
-          <Label>State</Label>
+          <Label htmlFor="state">State</Label>
           <Input
+            id="state"
             value={state}
-            onChange={(e) => setState(e.target.value)}
+            aria-invalid={!!fieldErrors.state}
+            onChange={(e) => {
+              setState(e.target.value);
+              clearFieldError("state");
+            }}
             placeholder="e.g. Maharashtra"
+            disabled={loading}
           />
+          <FieldError message={fieldErrors.state} />
         </div>
 
         <div className="space-y-1.5">
-          <Label>Postal Code</Label>
+          <Label htmlFor="postal-code">Postal Code</Label>
           <Input
+            id="postal-code"
             value={postalCode}
-            onChange={(e) => setPostalCode(e.target.value)}
+            aria-invalid={!!fieldErrors.postalCode}
+            onChange={(e) => {
+              setPostalCode(e.target.value);
+              clearFieldError("postalCode");
+            }}
             placeholder="e.g. 400001"
+            disabled={loading}
           />
+          <FieldError message={fieldErrors.postalCode} />
         </div>
       </div>
 
       <div className="space-y-1.5">
-        <Label>Address</Label>
+        <Label htmlFor="address">Address</Label>
         <Input
+          id="address"
           value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          aria-invalid={!!fieldErrors.address}
+          onChange={(e) => {
+            setAddress(e.target.value);
+            clearFieldError("address");
+          }}
           placeholder="e.g. Plot 42, Palm Beach Road"
+          disabled={loading}
         />
+        <FieldError message={fieldErrors.address} />
       </div>
 
       <div className="space-y-1.5">
         <ImageUpload
           label="Project Cover Image"
           value={coverImage}
-          onChange={(val) => setCoverImage(val || "")}
+          onChange={(val) => {
+            setCoverImage(val || "");
+            clearFieldError("coverImage");
+          }}
           maxFiles={1}
+          disabled={loading}
           description="Upload primary cover photograph for this property development"
         />
+        <FieldError message={fieldErrors.coverImage} />
       </div>
 
       <div className="space-y-1.5">
-        <Label>Description</Label>
+        <Label htmlFor="description">Description</Label>
         <Textarea
+          id="description"
+          disabled={loading}
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          aria-invalid={!!fieldErrors.description}
+          onChange={(e) => {
+            setDescription(e.target.value);
+            clearFieldError("description");
+          }}
           placeholder="Detailed project description, architectural highlights, amenities..."
         />
+        <FieldError message={fieldErrors.description} />
       </div>
 
       {/* Amenities Multi-Select */}
       {allAmenities.length > 0 && (
         <div className="space-y-2">
-          <Label>Amenities</Label>
+          <Label htmlFor="amenities">Amenities</Label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-40 overflow-y-auto p-3 rounded-xl border border-[var(--border)] bg-[var(--surface)]">
             {allAmenities.map((amenity) => {
               const isSelected = selectedAmenityIds.includes(amenity.id);
@@ -306,6 +488,7 @@ export default function ProjectForm({ project, onSubmit, onCancel }: ProjectForm
                 >
                   <input
                     type="checkbox"
+                    disabled={loading}
                     checked={isSelected}
                     onChange={() => handleAmenityToggle(amenity.id)}
                     className="accent-[var(--brand)] rounded"

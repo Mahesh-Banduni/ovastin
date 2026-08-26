@@ -1,5 +1,15 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image"
 import Subtitle from "../ui/custom/Subtitle"
+import {
+    contactFormSchema,
+    validateForm,
+    toContactApiPayload,
+    type FieldErrors,
+} from "@/lib/validation";
+import { apiFetch } from "@/lib/api";
 
 const contactList = [
     {icon: "/images/home/contact-icon-1.svg", image: "/images/home/contact-user-1.webp", title: "Call Us At", content: ["+88 016 482 459 48","+88 016 482 459 48"]},
@@ -8,7 +18,71 @@ const contactList = [
 
 const contactInquiryType=["Web Development","Mobile App Development","UI/UX Design","Enterprise Application","Digital Marketing","Video and Content Production"];
 
+const INITIAL_VALUES = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    inquiryType: "",
+    message: "",
+};
+
 export default function Contact(){
+    const [values, setValues] = useState(INITIAL_VALUES);
+    const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+    const [formError, setFormError] = useState<string | null>(null);
+    const [sending, setSending] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+
+    /** Clears a single field's inline error once the user edits it again. */
+    const clearFieldError = (field: string) =>
+        setFieldErrors((prev) =>
+            prev[field] ? { ...prev, [field]: undefined } : prev
+        );
+
+    const handleChange =
+        (field: keyof typeof INITIAL_VALUES) =>
+        (
+            e: React.ChangeEvent<
+                HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+            >
+        ) => {
+            setValues((prev) => ({ ...prev, [field]: e.target.value }));
+            clearFieldError(field);
+        };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setFormError(null);
+        setFieldErrors({});
+
+        // Validate against the backend-mirrored Zod schema before submitting.
+        const result = validateForm(contactFormSchema, values);
+        if (!result.success) {
+            setFieldErrors(result.errors);
+            return;
+        }
+
+        setSending(true);
+        try {
+            await apiFetch("/api/v1/contact", {
+                method: "POST",
+                body: JSON.stringify(toContactApiPayload(result.data)),
+            });
+            setSubmitted(true);
+            setValues(INITIAL_VALUES);
+        } catch (err: unknown) {
+            setFormError(
+                err instanceof Error
+                    ? err.message
+                    : "Failed to send your message. Please try again later."
+            );
+        } finally {
+            setSending(false);
+        }
+    };
+
     return(
         <div className="h-full flex flex-col lg:flex-row">
             <div className="w-full h-auto lg:w-1/2 bg-cover bg-center bg-no-repeat p-scale-md-15 lg:pr-25! flex items-center justify-center lg:justify-end" style={{backgroundImage:`url("/images/home/contact-bg-1.webp")`}}>
@@ -41,46 +115,66 @@ export default function Contact(){
             <div className="w-full h-auto lg:w-1/2 bg-cover bg-center bg-no-repeat py-scale-md-15 px-scale-sm-10 flex items-center justify-center lg:justify-end" style={{backgroundImage:`url("/images/home/contact-bg-2.webp")`}}>
                 <div className="bg-white px-scale-sm-11 py-scale-sm-13 h-full flex flex-col gap-scale-md-10">
                     <p className="para-text-lg font-semibold! lg:text-[22px]!">Ready to Take the Next Step? Let’s Talk About Your Real Estate Goals</p>
-                    <div className="flex flex-col w-full gap-scale-md-8">
+                    {submitted && (
+                        <p className="para-text-sm font-semibold! text-green-600" role="status">
+                            Thank you! Your message has been sent successfully. We’ll get back to you soon.
+                        </p>
+                    )}
+
+                    <form onSubmit={handleSubmit} noValidate className="flex flex-col w-full gap-scale-md-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-scale-md-6">
                             <label>
                                 <p className="para-text-sm text-text-primary! font-semibold! gap-0 mb-1.25">First Name<span className="text-red-500">*</span></p>
-                                <input type="text" placeholder="Enter your first name" className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />
+                                <input id="contact-first-name" type="text" placeholder="Enter your first name" value={values.firstName} onChange={handleChange("firstName")} aria-invalid={!!fieldErrors.firstName} className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />
+                                {fieldErrors.firstName && <span className="block mt-1 text-xs font-medium text-red-500">{fieldErrors.firstName}</span>}
                             </label>
                             <label>
                                 <p className="para-text-sm text-text-primary! font-semibold! gap-0 mb-1.25">Last Name<span className="text-red-500">*</span></p>
-                                <input type="text" placeholder="Enter your last name" className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />
+                                <input id="contact-last-name" type="text" placeholder="Enter your last name" value={values.lastName} onChange={handleChange("lastName")} aria-invalid={!!fieldErrors.lastName} className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />
+                                {fieldErrors.lastName && <span className="block mt-1 text-xs font-medium text-red-500">{fieldErrors.lastName}</span>}
                             </label> 
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-scale-sm-6">
                             <label>
                                 <p className="para-text-sm text-text-primary! font-semibold! gap-0 mb-1.25">Email<span className="text-red-500">*</span></p>
-                                <input type="text" placeholder="Enter your email" className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />
+                                <input id="contact-email" type="email" placeholder="Enter your email" value={values.email} onChange={handleChange("email")} aria-invalid={!!fieldErrors.email} className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />
+                                {fieldErrors.email && <span className="block mt-1 text-xs font-medium text-red-500">{fieldErrors.email}</span>}
                             </label> 
                             <label>
                                 <p className="para-text-sm text-text-primary! font-semibold! gap-0 mb-1.25">Phone Number<span className="text-red-500">*</span></p>
-                                <input type="text" placeholder="Enter your phone number" className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />
+                                <input id="contact-phone" type="tel" placeholder="Enter your phone number" maxLength={20} value={values.phone} onChange={handleChange("phone")} aria-invalid={!!fieldErrors.phone} className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />
+                                {fieldErrors.phone && <span className="block mt-1 text-xs font-medium text-red-500">{fieldErrors.phone}</span>}
                             </label> 
                         </div>  
                         <label>
                             <p className="para-text-sm text-text-primary! font-semibold! gap-0 mb-1.25">Address<span className="text-red-500">*</span></p>
-                            <input type="text" placeholder="Enter your address" className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />
+                            <input id="contact-address" type="text" placeholder="Enter your address" value={values.address} onChange={handleChange("address")} aria-invalid={!!fieldErrors.address} className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary" />
+                            {fieldErrors.address && <span className="block mt-1 text-xs font-medium text-red-500">{fieldErrors.address}</span>}
                         </label>  
                         <label>
                             <p className="para-text-sm text-text-primary! font-semibold! gap-0 mb-1.25">Inquiry Type<span className="text-red-500">*</span></p>
-                            <select defaultValue={""} required className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary">
+                            <select id="contact-inquiry-type" value={values.inquiryType} onChange={handleChange("inquiryType")} aria-invalid={!!fieldErrors.inquiryType} className="w-full h-10 border-b-2 border-gray-400 p-1.5 text-text-primary">
                                 <option className="text-text-primary p-1.25" value="" disabled>Select the inquiry type</option>
                                 {contactInquiryType.map((item, index)=>(
                                     <option className="text-text-primary" key={index}>{item}</option>
                                 ))}
                             </select>
+                            {fieldErrors.inquiryType && <span className="block mt-1 text-xs font-medium text-red-500">{fieldErrors.inquiryType}</span>}
                         </label>  
                         <label>
                             <p className="para-text-sm text-text-primary! font-semibold! gap-0 mb-1.25">Message<span className="text-red-500">*</span></p>
-                            <textarea placeholder="Enter your message" className="w-full h-30 border-b-2 border-gray-400 p-1.5 text-text-primary" />
-                        </label>                                         
-                    </div>
-                    <button className="btn-action">Submit Now</button>
+                            <textarea id="contact-message" placeholder="Enter your message (minimum 10 characters)" value={values.message} onChange={handleChange("message")} aria-invalid={!!fieldErrors.message} className="w-full h-30 border-b-2 border-gray-400 p-1.5 text-text-primary" />
+                            {fieldErrors.message && <span className="block mt-1 text-xs font-medium text-red-500">{fieldErrors.message}</span>}
+                        </label>
+
+                        {formError && (
+                            <p className="para-text-sm font-semibold! text-red-500" role="alert">{formError}</p>
+                        )}
+
+                        <button type="submit" disabled={sending} className="btn-action cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
+                            {sending ? "Sending..." : "Submit Now"}
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
