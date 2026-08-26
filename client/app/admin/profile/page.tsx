@@ -5,8 +5,15 @@ import { UserCheck, Lock, CheckCircle2, AlertCircle, Loader2 } from "lucide-reac
 import AdminPageHeader from "../../../components/admin/AdminPageHeader";
 import Input from "../../../components/ui/store/Input";
 import Label from "../../../components/ui/store/Label";
+import FieldError from "../../../components/ui/store/FieldError";
 import { useProfile } from "../../../hooks/useProfile";
 import Button from "@/components/ui/store/Button";
+import {
+  updateProfileFormSchema,
+  changePasswordFormSchema,
+  validateForm,
+  type FieldErrors,
+} from "@/lib/validation";
 
 export default function AdminProfilePage() {
   const { profile, loading, error, updateProfile, changePassword } = useProfile();
@@ -17,6 +24,7 @@ export default function AdminProfilePage() {
   const [profileLoading, setProfileLoading] = useState(false);
   const [profileSuccess, setProfileSuccess] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
+  const [profileFieldErrors, setProfileFieldErrors] = useState<FieldErrors>({});
 
   // Password Form state
   const [currentPassword, setCurrentPassword] = useState("");
@@ -25,6 +33,19 @@ export default function AdminProfilePage() {
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [passwordSuccess, setPasswordSuccess] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [passwordFieldErrors, setPasswordFieldErrors] = useState<FieldErrors>({});
+
+  /** Clears a single field's inline error once the user edits it again. */
+  const clearProfileFieldError = (field: string) =>
+    setProfileFieldErrors((prev) =>
+      prev[field] ? { ...prev, [field]: undefined } : prev
+    );
+
+  /** Clears a single field's inline error once the user edits it again. */
+  const clearPasswordFieldError = (field: string) =>
+    setPasswordFieldErrors((prev) =>
+      prev[field] ? { ...prev, [field]: undefined } : prev
+    );
 
   useEffect(() => {
     if (profile) {
@@ -37,14 +58,27 @@ export default function AdminProfilePage() {
     e.preventDefault();
     setProfileError(null);
     setProfileSuccess(false);
+    setProfileFieldErrors({});
+
+    // Validate against the backend-mirrored Zod schema before submitting.
+    const result = validateForm(updateProfileFormSchema, { name, email });
+    if (!result.success) {
+      setProfileFieldErrors(result.errors);
+      return;
+    }
+
     setProfileLoading(true);
 
     try {
-      await updateProfile({ name, email });
+      await updateProfile({ name: result.data.name, email: result.data.email });
       setProfileSuccess(true);
       setTimeout(() => setProfileSuccess(false), 4000);
-    } catch (err: any) {
-      setProfileError(err?.message || "Failed to update profile details");
+    } catch (err: unknown) {
+      setProfileError(
+        err instanceof Error
+          ? err.message
+          : "Failed to update profile details"
+      );
     } finally {
       setProfileLoading(false);
     }
@@ -54,28 +88,37 @@ export default function AdminProfilePage() {
     e.preventDefault();
     setPasswordError(null);
     setPasswordSuccess(false);
+    setPasswordFieldErrors({});
 
-    if (newPassword !== confirmPassword) {
-      setPasswordError("New passwords do not match");
-      return;
-    }
-
-    if (newPassword.length < 8) {
-      setPasswordError("New password must be at least 8 characters");
+    // Validate against the backend-mirrored Zod schema (+ confirm match).
+    const result = validateForm(changePasswordFormSchema, {
+      currentPassword,
+      newPassword,
+      confirmPassword,
+    });
+    if (!result.success) {
+      setPasswordFieldErrors(result.errors);
       return;
     }
 
     setPasswordLoading(true);
 
     try {
-      await changePassword({ currentPassword, newPassword });
+      await changePassword({
+        currentPassword: result.data.currentPassword,
+        newPassword: result.data.newPassword,
+      });
       setPasswordSuccess(true);
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
       setTimeout(() => setPasswordSuccess(false), 4000);
-    } catch (err: any) {
-      setPasswordError(err?.message || "Failed to change password. Ensure current password is correct.");
+    } catch (err: unknown) {
+      setPasswordError(
+        err instanceof Error
+          ? err.message
+          : "Failed to change password. Ensure current password is correct."
+      );
     } finally {
       setPasswordLoading(false);
     }
@@ -130,26 +173,36 @@ export default function AdminProfilePage() {
                 </div>
               )}
 
-              <form onSubmit={handleUpdateProfile} className="space-y-4">
+              <form onSubmit={handleUpdateProfile} noValidate className="space-y-4">
                 <div className="space-y-1.5">
-                  <Label required>Full Name</Label>
+                  <Label htmlFor="profile-full-name">Full Name</Label>
                   <Input
-                    required
+                    id="profile-full-name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    aria-invalid={!!profileFieldErrors.name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      clearProfileFieldError("name");
+                    }}
                     placeholder="Admin Name"
                   />
+                  <FieldError message={profileFieldErrors.name} />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label required>Email Address</Label>
+                  <Label htmlFor="profile-email">Email Address</Label>
                   <Input
+                    id="profile-email"
                     type="email"
-                    required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    aria-invalid={!!profileFieldErrors.email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      clearProfileFieldError("email");
+                    }}
                     placeholder="admin@example.com"
                   />
+                  <FieldError message={profileFieldErrors.email} />
                 </div>
 
                 <div className="pt-2">
@@ -196,38 +249,53 @@ export default function AdminProfilePage() {
                 </div>
               )}
 
-              <form onSubmit={handleChangePassword} className="space-y-4">
+              <form onSubmit={handleChangePassword} noValidate className="space-y-4">
                 <div className="space-y-1.5">
-                  <Label required>Current Password</Label>
+                  <Label htmlFor="current-password">Current Password</Label>
                   <Input
+                    id="current-password"
                     type="password"
-                    required
                     value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    aria-invalid={!!passwordFieldErrors.currentPassword}
+                    onChange={(e) => {
+                      setCurrentPassword(e.target.value);
+                      clearPasswordFieldError("currentPassword");
+                    }}
                     placeholder="••••••••"
                   />
+                  <FieldError message={passwordFieldErrors.currentPassword} />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label required>New Password</Label>
+                  <Label htmlFor="profile-new-password">New Password</Label>
                   <Input
+                    id="profile-new-password"
                     type="password"
-                    required
                     value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
+                    aria-invalid={!!passwordFieldErrors.newPassword}
+                    onChange={(e) => {
+                      setNewPassword(e.target.value);
+                      clearPasswordFieldError("newPassword");
+                    }}
                     placeholder="Minimum 8 characters"
                   />
+                  <FieldError message={passwordFieldErrors.newPassword} />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label required>Confirm New Password</Label>
+                  <Label htmlFor="profile-confirm-new-password">Confirm New Password</Label>
                   <Input
+                    id="profile-confirm-new-password"
                     type="password"
-                    required
                     value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    aria-invalid={!!passwordFieldErrors.confirmPassword}
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value);
+                      clearPasswordFieldError("confirmPassword");
+                    }}
                     placeholder="Re-type new password"
                   />
+                  <FieldError message={passwordFieldErrors.confirmPassword} />
                 </div>
 
                 <div className="pt-2">

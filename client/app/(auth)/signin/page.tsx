@@ -7,6 +7,12 @@ import Link from "next/link";
 import { Lock, Mail, ArrowRight, AlertCircle, Loader2, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import Input from "../../../components/ui/store/Input";
 import Label from "../../../components/ui/store/Label";
+import FieldError from "../../../components/ui/store/FieldError";
+import {
+  signInFormSchema,
+  validateForm,
+  type FieldErrors,
+} from "@/lib/validation";
 
 function SignInForm() {
   const router = useRouter();
@@ -18,16 +24,32 @@ function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+
+  /** Clears a single field's inline error once the user edits it again. */
+  const clearFieldError = (field: string) =>
+    setFieldErrors((prev) =>
+      prev[field] ? { ...prev, [field]: undefined } : prev
+    );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setFieldErrors({});
+
+    // Validate against the backend-mirrored Zod schema before authenticating.
+    const result = validateForm(signInFormSchema, { email, password });
+    if (!result.success) {
+      setFieldErrors(result.errors);
+      return;
+    }
+
     setLoading(true);
 
     try {
       const res = await signIn("credentials", {
-        email,
-        password,
+        email: result.data.email,
+        password: result.data.password,
         redirect: false,
       });
 
@@ -37,8 +59,12 @@ function SignInForm() {
         router.push(callbackUrl);
         router.refresh();
       }
-    } catch (err: any) {
-      setError(err?.message || "An unexpected error occurred.");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "An unexpected error occurred."
+      );
     } finally {
       setLoading(false);
     }
@@ -82,30 +108,36 @@ function SignInForm() {
       )}
 
       {/* ── Sign In Form ─────────────────────────────────────── */}
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} noValidate className="space-y-5">
         {/* Email */}
         <div className="space-y-1.5">
-          <Label required>Email Address</Label>
+          <Label htmlFor="signin-email">Email Address<span className="text-red-500 ml-scale-sm-0.75">*</span></Label>
           <div className="relative">
             <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-[var(--text-muted)]">
               <Mail size={17} />
             </span>
             <Input
+              id="signin-email"
               type="email"
+              aria-label="Email Address"
               placeholder="admin@example.com"
-              required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              aria-invalid={!!fieldErrors.email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                clearFieldError("email");
+              }}
               className="pl-10"
               disabled={loading}
             />
           </div>
+          <FieldError message={fieldErrors.email} />
         </div>
 
         {/* Password */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <Label required>Password</Label>
+            <Label htmlFor="signin-password">Password<span className="text-red-500 ml-scale-sm-0.75">*</span></Label>
             <Link
               href="/forgot-password"
               className="text-xs font-medium text-[var(--brand)] hover:underline underline-offset-2 transition-colors"
@@ -118,11 +150,16 @@ function SignInForm() {
               <Lock size={17} />
             </span>
             <Input
+              id="signin-password"
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
-              required
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              aria-label="Password"
+              aria-invalid={!!fieldErrors.password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                clearFieldError("password");
+              }}
               className="pl-10 pr-11"
               disabled={loading}
             />

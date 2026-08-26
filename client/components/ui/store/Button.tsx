@@ -1,6 +1,11 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type ButtonVariant = "primary" | "secondary" | "outline" | "danger" | "ghost";
+type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "outline"
+  | "danger"
+  | "ghost";
 
 type ButtonProps = {
   children: ReactNode;
@@ -10,45 +15,104 @@ type ButtonProps = {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: `
-    bg-primary text-primary-foreground
-    border border-primary
-    shadow-[0_2px_6px_rgba(0,0,0,0.12)]
-    hover:brightness-110
-    hover:-translate-y-[1px]
-    hover:shadow-[0_4px_12px_rgba(0,0,0,0.16)]
+    relative isolate overflow-hidden
+    border border-[color-mix(in_srgb,var(--brand)_100%,black_20%)]
+    text-[var(--background)]
+
+    bg-[linear-gradient(180deg,color-mix(in_srgb,var(--brand)_100%,white_16%)_0%,var(--brand)_50%,color-mix(in_srgb,var(--brand)_100%,black_10%)_100%)]
+
+    shadow-[0_1px_0_rgba(255,255,255,0.25)_inset,0_1px_2px_rgba(0,0,0,0.14),0_3px_8px_rgba(0,0,0,0.10)]
+
+    before:content-[''] before:absolute before:inset-0
+    before:bg-[linear-gradient(180deg,rgba(255,255,255,0.16)_0%,rgba(255,255,255,0)_60%)]
+    before:opacity-0 before:transition-opacity before:duration-200
+    hover:before:opacity-100
+
+    hover:border-[color-mix(in_srgb,var(--brand)_100%,black_14%)]
+    hover:shadow-[0_1px_0_rgba(255,255,255,0.3)_inset,0_2px_4px_rgba(0,0,0,0.16),0_8px_20px_-4px_color-mix(in_srgb,var(--brand)_60%,transparent)]
+
+    active:before:opacity-0
+    active:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--brand)_100%,black_8%)_0%,color-mix(in_srgb,var(--brand)_100%,black_14%)_100%)]
+    active:shadow-[0_1px_3px_rgba(0,0,0,0.22)_inset]
   `,
 
   secondary: `
-    bg-secondary text-secondary-foreground
-    border border-secondary
-    shadow-sm
-    hover:brightness-105
-    hover:-translate-y-[1px]
-    hover:shadow-md
+    relative isolate overflow-hidden
+    border border-[var(--border)]
+    text-[var(--secondary-foreground)]
+
+    bg-[linear-gradient(180deg,color-mix(in_srgb,var(--secondary)_100%,white_20%)_0%,var(--secondary)_50%,color-mix(in_srgb,var(--secondary)_100%,black_6%)_100%)]
+
+    shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_1px_2px_rgba(0,0,0,0.05)]
+
+    before:content-[''] before:absolute before:inset-0
+    before:bg-[linear-gradient(180deg,rgba(255,255,255,0.35)_0%,rgba(255,255,255,0)_60%)]
+    before:opacity-0 before:transition-opacity before:duration-200
+    hover:before:opacity-100
+
+    hover:border-[color-mix(in_srgb,var(--border)_100%,black_12%)]
+    hover:shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_2px_6px_rgba(0,0,0,0.08)]
+
+    active:before:opacity-0
+    active:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--secondary)_100%,black_4%)_0%,color-mix(in_srgb,var(--secondary)_100%,black_10%)_100%)]
+    active:shadow-[0_1px_2px_rgba(0,0,0,0.08)_inset]
   `,
 
   outline: `
-    bg-transparent text-foreground
-    border border-border
-    shadow-sm
-    hover:bg-muted
-    hover:border-foreground/20
+    relative isolate overflow-hidden
+    border border-[var(--border)]
+    bg-transparent
+    text-[var(--text-primary)]
+
+    shadow-none
+
+    before:content-[''] before:absolute before:inset-0
+    before:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--brand)_8%,transparent)_0%,transparent_70%)]
+    before:opacity-0 before:transition-opacity before:duration-200
+    hover:before:opacity-100
+
+    hover:bg-[var(--surface-hover)]
+    hover:border-[var(--brand)]
+    hover:text-[var(--brand)]
+    hover:shadow-[0_2px_8px_-2px_color-mix(in_srgb,var(--brand)_35%,transparent)]
+
+    active:before:opacity-0
+    active:bg-[color-mix(in_srgb,var(--surface-hover)_100%,black_4%)]
   `,
 
   danger: `
-    bg-destructive text-white
-    border border-destructive
-    shadow-sm
-    hover:brightness-110
-    hover:-translate-y-[1px]
-    hover:shadow-md
+    relative isolate overflow-hidden
+    border border-[color-mix(in_srgb,var(--destructive)_100%,black_20%)]
+    text-white
+
+    bg-[linear-gradient(180deg,color-mix(in_srgb,var(--destructive)_100%,white_16%)_0%,var(--destructive)_50%,color-mix(in_srgb,var(--destructive)_100%,black_10%)_100%)]
+
+    shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_1px_2px_rgba(0,0,0,0.14),0_3px_8px_rgba(0,0,0,0.10)]
+
+    before:content-[''] before:absolute before:inset-0
+    before:bg-[linear-gradient(180deg,rgba(255,255,255,0.16)_0%,rgba(255,255,255,0)_60%)]
+    before:opacity-0 before:transition-opacity before:duration-200
+    hover:before:opacity-100
+
+    hover:border-[color-mix(in_srgb,var(--destructive)_100%,black_14%)]
+    hover:shadow-[0_1px_0_rgba(255,255,255,0.26)_inset,0_2px_4px_rgba(0,0,0,0.16),0_8px_20px_-4px_color-mix(in_srgb,var(--destructive)_60%,transparent)]
+
+    active:before:opacity-0
+    active:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--destructive)_100%,black_8%)_0%,color-mix(in_srgb,var(--destructive)_100%,black_14%)_100%)]
+    active:shadow-[0_1px_3px_rgba(0,0,0,0.22)_inset]
   `,
 
   ghost: `
-    bg-transparent text-muted-foreground
     border border-transparent
-    hover:bg-muted
-    hover:text-foreground
+    bg-transparent
+    text-[var(--text-secondary)]
+
+    shadow-none
+
+    hover:bg-[var(--surface-hover)]
+    hover:text-[var(--text-primary)]
+
+    active:bg-[color-mix(in_srgb,var(--surface-hover)_100%,black_4%)]
   `,
 };
 
@@ -66,29 +130,41 @@ export default function Button({
       disabled={disabled}
       className={`
         inline-flex items-center justify-center gap-2
-        h-9 px-4
-        [&>svg]:block [&>svg]:h-4 [&>svg]:w-4 [&>svg]:shrink-0
+
+        h-9 px-3 text-sm
+        sm:h-9 sm:px-4
+        md:h-10 md:px-4
+        lg:h-10 lg:px-5
+
+        [&>svg]:block
+        [&>svg]:h-4 [&>svg]:w-4
+        [&>svg]:shrink-0
+
         rounded-lg
-        text-sm font-semibold
         font-heading
+        font-medium
+        tracking-[-0.01em]
+
         cursor-pointer
         whitespace-nowrap
         select-none
+        outline-none
 
-        transition-all duration-200 ease-out
+        [&>*]:relative [&>*]:z-10
+        [&::before]:pointer-events-none
 
-        active:translate-y-0
-        active:scale-[0.98]
+        transition-[background-color,border-color,box-shadow,color]
+        duration-200
+        ease-out
 
         disabled:pointer-events-none
         disabled:cursor-not-allowed
         disabled:opacity-50
 
-        focus-visible:outline-none
         focus-visible:ring-2
-        focus-visible:ring-ring
+        focus-visible:ring-[var(--brand)]
         focus-visible:ring-offset-2
-        focus-visible:ring-offset-background
+        focus-visible:ring-offset-[var(--background)]
 
         ${variantStyles[variant]}
         ${className}

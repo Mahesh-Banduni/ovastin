@@ -1,19 +1,22 @@
 interface LabelProps {
   children: React.ReactNode;
   required?: boolean;
+  htmlFor?: string;
 }
 
 export default function Label({
   children,
   required,
+  htmlFor,
 }: LabelProps) {
   return (
     <label
+      htmlFor={htmlFor}
       className="
-      text-sm
-      font-semibold
-      text-[var(--text-primary)]
-    "
+        text-sm
+        font-semibold
+        text-[var(--text-primary)]
+      "
     >
       {children}
 

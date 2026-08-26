@@ -320,7 +320,7 @@ export default function AdminProjectsPage() {
                 maxFiles={1}
                 description="Upload image or paste image URL to append to the project gallery"
               />
-              <Input type="text" placeholder="Alt text / caption (optional)" value={newImageAlt} onChange={(e) => setNewImageAlt(e.target.value)} />
+              <Input id="gallery-image-alt" type="text" placeholder="Alt text / caption (optional)" value={newImageAlt} onChange={(e) => setNewImageAlt(e.target.value)} />
               <Button
                 type="submit"
                 variant="primary"
@@ -333,7 +333,7 @@ export default function AdminProjectsPage() {
             </form>
 
             <div className="space-y-2">
-              <Label>Current Gallery ({galleryProject.gallery?.length ?? 0} images)</Label>
+              <Label htmlFor="gallery-image-alt">Current Gallery ({galleryProject.gallery?.length ?? 0} images)</Label>
               {galleryProject.gallery && galleryProject.gallery.length > 0 ? (
                 <div className="grid grid-cols-3 gap-3 max-h-60 overflow-y-auto rounded-xl p-1">
                   {galleryProject.gallery.map((img) => (
