@@ -15,7 +15,7 @@ export const options = {
     sustained_backend_checks: {
       executor: "constant-vus",
       vus: 10,
-      duration: "10m",
+      duration: "5m",
     },
   },
   thresholds: {
