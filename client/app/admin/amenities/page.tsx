@@ -132,7 +132,7 @@ export default function AdminAmenitiesPage() {
                   <TableRow>
                     <TableHead>Amenity Name</TableHead>
                     <TableHead>Slug</TableHead>
-                    <TableHead>Icon Identifier</TableHead>
+                    <TableHead>Image</TableHead>
                     <TableHead>Linked Projects</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
@@ -158,9 +158,17 @@ export default function AdminAmenitiesPage() {
                       </TableCell>
 
                       <TableCell>
-                        <span className="text-xs font-medium px-2 py-1 rounded bg-[var(--surface-hover)] border border-[var(--border)] text-[var(--text-secondary)]">
-                          {amenity.icon || "Default"}
-                        </span>
+                        {amenity.icon ? (
+                          <img
+                            src={amenity.icon}
+                            alt={amenity.name}
+                            className="h-10 w-10 rounded-lg object-cover border border-[var(--border)] bg-[var(--surface-hover)]"
+                          />
+                        ) : (
+                          <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-dashed border-[var(--border)] bg-[var(--surface-hover)] text-[10px] font-medium text-[var(--text-muted)]">
+                            No image
+                          </div>
+                        )}
                       </TableCell>
 
                       <TableCell>

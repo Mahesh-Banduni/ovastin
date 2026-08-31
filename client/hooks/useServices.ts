@@ -9,6 +9,7 @@ export interface ServiceItem {
   slug: string;
   description?: string | null;
   icon?: string | null;
+  coverImage?: string | null;
   isActive: boolean;
   sortOrder: number;
   createdAt: string;
@@ -50,18 +51,32 @@ export function useServices(initialPage = 1, initialPageSize = 10) {
   }, [fetchServices]);
 
   const createService = async (serviceData: any) => {
+    const formData = new FormData();
+    Object.entries(serviceData).forEach(([key, val]) => {
+      if (val !== undefined && val !== null) {
+        formData.append(key, val instanceof File ? val : String(val));
+      }
+    });
+
     const res = await apiFetch("/api/v1/services", {
       method: "POST",
-      body: JSON.stringify(serviceData),
+      body: formData,
     });
     await fetchServices();
     return res.data;
   };
 
   const updateService = async (id: string, serviceData: any) => {
+    const formData = new FormData();
+    Object.entries(serviceData).forEach(([key, val]) => {
+      if (val !== undefined && val !== null) {
+        formData.append(key, val instanceof File ? val : String(val));
+      }
+    });
+
     const res = await apiFetch(`/api/v1/services/${id}`, {
       method: "PATCH",
-      body: JSON.stringify(serviceData),
+      body: formData,
     });
     await fetchServices();
     return res.data;

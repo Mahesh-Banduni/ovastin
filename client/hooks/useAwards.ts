@@ -50,18 +50,32 @@ export function useAwards(initialPage = 1, initialPageSize = 10) {
   }, [fetchAwards]);
 
   const createAward = async (awardData: any) => {
+    const formData = new FormData();
+    Object.entries(awardData).forEach(([key, val]) => {
+      if (val !== undefined && val !== null) {
+        formData.append(key, val instanceof File ? val : String(val));
+      }
+    });
+
     const res = await apiFetch("/api/v1/awards", {
       method: "POST",
-      body: JSON.stringify(awardData),
+      body: formData,
     });
     await fetchAwards();
     return res.data;
   };
 
   const updateAward = async (id: string, awardData: any) => {
+    const formData = new FormData();
+    Object.entries(awardData).forEach(([key, val]) => {
+      if (val !== undefined && val !== null) {
+        formData.append(key, val instanceof File ? val : String(val));
+      }
+    });
+
     const res = await apiFetch(`/api/v1/awards/${id}`, {
       method: "PATCH",
-      body: JSON.stringify(awardData),
+      body: formData,
     });
     await fetchAwards();
     return res.data;

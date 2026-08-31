@@ -1,6 +1,7 @@
 import { injectable, inject } from "inversify";
 import ApiError from "../../utils/ApiError.js";
 import { TYPES } from "../../types.js";
+import { uploadToImageKit } from "../../utils/imagekit.js";
 import { AmenityRepository, CreateAmenityData, UpdateAmenityData } from "./amenity.repository.js";
 
 function slugify(text: string): string {
@@ -28,20 +29,34 @@ export class AmenityService {
     return amenity;
   }
 
-  async createAmenity(data: CreateAmenityData) {
+  async createAmenity(data: CreateAmenityData, files?: any) {
     const slug = data.slug || slugify(data.name);
     const existing = await this.amenityRepository.findBySlug(slug);
     if (existing) throw new ApiError(409, "An amenity with this slug already exists");
-    return this.amenityRepository.create({ ...data, slug });
+
+    const amenityData = { ...data };
+    const iconFile = files?.icon?.[0];
+    if (iconFile?.buffer && iconFile.originalname) {
+      amenityData.icon = await uploadToImageKit(iconFile.buffer, iconFile.originalname, "ovastin/amenities");
+    }
+
+    return this.amenityRepository.create({ ...amenityData, slug });
   }
 
-  async updateAmenity(id: string, data: UpdateAmenityData) {
+  async updateAmenity(id: string, data: UpdateAmenityData, files?: any) {
     await this.getAmenity(id);
     if (data.slug) {
       const existing = await this.amenityRepository.findBySlug(data.slug);
       if (existing && existing.id !== id) throw new ApiError(409, "An amenity with this slug already exists");
     }
-    return this.amenityRepository.update(id, data);
+
+    const updateData = { ...data };
+    const iconFile = files?.icon?.[0];
+    if (iconFile?.buffer && iconFile.originalname) {
+      updateData.icon = await uploadToImageKit(iconFile.buffer, iconFile.originalname, "ovastin/amenities");
+    }
+
+    return this.amenityRepository.update(id, updateData);
   }
 
   async deleteAmenity(id: string) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Plus, Edit2, Trash2, Image as ImageIcon,
   Loader2, Building2, Filter,
@@ -36,7 +36,7 @@ export default function AdminProjectsPage() {
   const {
     projects, total, page, pageSize, loading, error,
     filters, setFilters, createProject, updateProject,
-    deleteProject, addImageUrl, removeImage,
+    deleteProject, addImageUrl, uploadGalleryImage, removeImage,
   } = useProjects();
 
   const [formModalOpen, setFormModalOpen] = useState(false);
@@ -44,9 +44,19 @@ export default function AdminProjectsPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [galleryProject, setGalleryProject] = useState<Project | null>(null);
-  const [newImageUrl, setNewImageUrl] = useState("");
+  const [newImageUrl, setNewImageUrl] = useState<any>("");
   const [newImageAlt, setNewImageAlt] = useState("");
   const [addingImage, setAddingImage] = useState(false);
+
+  // Sync galleryProject state with updated projects array so changes display immediately
+  useEffect(() => {
+    if (galleryProject) {
+      const updated = projects.find((p) => p.id === galleryProject.id);
+      if (updated) {
+        setGalleryProject(updated);
+      }
+    }
+  }, [projects, galleryProject?.id]);
 
   const handleOpenCreate = () => { setEditingProject(null); setFormModalOpen(true); };
   const handleOpenEdit = (project: Project) => { setEditingProject(project); setFormModalOpen(true); };
@@ -70,7 +80,11 @@ export default function AdminProjectsPage() {
     if (!galleryProject || !newImageUrl) return;
     setAddingImage(true);
     try {
-      await addImageUrl(galleryProject.id, { imageUrl: newImageUrl, altText: newImageAlt || undefined });
+      if (typeof File !== "undefined" && newImageUrl instanceof File) {
+        await uploadGalleryImage(galleryProject.id, newImageUrl, newImageAlt || undefined);
+      } else {
+        await addImageUrl(galleryProject.id, { imageUrl: newImageUrl, altText: newImageAlt || undefined });
+      }
       setNewImageUrl(""); setNewImageAlt("");
     } finally { setAddingImage(false); }
   };

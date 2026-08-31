@@ -24,13 +24,15 @@ export class AwardController {
   });
 
   create = asyncHandler(async (request, reply) => {
-    const award = await this.awardService.createAward(request.body as any);
+    const file = (request as any).file;
+    const award = await this.awardService.createAward(request.body as any, file);
     return reply.status(201).send(new ApiResponse(201, award, "Award created"));
   });
 
   update = asyncHandler(async (request, reply) => {
     const { id } = request.params as { id: string };
-    const award = await this.awardService.updateAward(id, request.body as any);
+    const file = (request as any).file;
+    const award = await this.awardService.updateAward(id, request.body as any, file);
     return reply.status(200).send(new ApiResponse(200, award, "Award updated"));
   });
 

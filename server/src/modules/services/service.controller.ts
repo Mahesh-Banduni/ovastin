@@ -24,13 +24,15 @@ export class ServiceController {
   });
 
   create = asyncHandler(async (request, reply) => {
-    const service = await this.serviceService.createService(request.body as any);
+    const files = (request as any).files;
+    const service = await this.serviceService.createService(request.body as any, files);
     return reply.status(201).send(new ApiResponse(201, service, "Service created"));
   });
 
   update = asyncHandler(async (request, reply) => {
     const { id } = request.params as { id: string };
-    const service = await this.serviceService.updateService(id, request.body as any);
+    const files = (request as any).files;
+    const service = await this.serviceService.updateService(id, request.body as any, files);
     return reply.status(200).send(new ApiResponse(200, service, "Service updated"));
   });
 

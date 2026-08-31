@@ -26,6 +26,10 @@ export interface CreateProjectData {
   longitude?: number;
   description?: string;
   coverImage?: string;
+  file?: {
+    buffer?: Buffer;
+    originalname?: string;
+  };
 }
 
 export interface UpdateProjectData extends Partial<CreateProjectData> {}
@@ -74,6 +78,7 @@ export class ProjectRepository {
         orderBy: { createdAt: "desc" },
         include: {
           developer: { select: { id: true, name: true } },
+          amenities: { include: { amenity: true } },
           _count: { select: { gallery: true, amenities: true } }
         }
       })
@@ -97,9 +102,21 @@ export class ProjectRepository {
     return this.prisma.project.findUnique({ where: { slug } });
   }
 
-  async create(data: CreateProjectData) {
-    return this.prisma.project.create({ data });
-  }
+async create(data: CreateProjectData) {
+  const project = await this.prisma.project.create({
+    data,
+  });
+
+  const projectImage = await this.prisma.projectImage.create({
+    data: {
+      projectId: project.id,
+      imageUrl: data.coverImage || "",
+      altText: project.name,
+    }
+  });
+
+  return { project, projectImage };
+}
 
   async update(id: string, data: UpdateProjectData) {
     return this.prisma.project.update({ where: { id }, data });

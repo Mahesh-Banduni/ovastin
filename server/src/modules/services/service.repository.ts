@@ -7,6 +7,7 @@ export interface CreateServiceData {
   slug: string;
   description?: string;
   icon?: string;
+  coverImage?: string;
   isActive?: boolean;
   sortOrder?: number;
 }

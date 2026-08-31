@@ -29,13 +29,15 @@ export class AmenityController {
   });
 
   create = asyncHandler(async (request, reply) => {
-    const amenity = await this.amenityService.createAmenity(request.body as any);
+    const files = (request as any).files;
+    const amenity = await this.amenityService.createAmenity(request.body as any, files);
     return reply.status(201).send(new ApiResponse(201, amenity, "Amenity created"));
   });
 
   update = asyncHandler(async (request, reply) => {
     const { id } = request.params as { id: string };
-    const amenity = await this.amenityService.updateAmenity(id, request.body as any);
+    const files = (request as any).files;
+    const amenity = await this.amenityService.updateAmenity(id, request.body as any, files);
     return reply.status(200).send(new ApiResponse(200, amenity, "Amenity updated"));
   });
 

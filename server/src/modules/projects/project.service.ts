@@ -11,6 +11,7 @@ import {
   UpdateProjectData,
   ProjectFilters
 } from "./project.repository.js";
+import { uploadToImageKit, uploadImageValue } from "../../utils/imagekit.js";
 
 function slugify(text: string): string {
   return text
@@ -48,7 +49,26 @@ export class ProjectService {
     const existing = await this.projectRepository.findBySlug(slug);
     if (existing) throw new ApiError(409, "A project with this slug already exists");
 
-    return this.projectRepository.create({ ...data, slug });
+    const { file, ...projectData } = data;
+
+    if (file?.buffer && file.originalname) {
+      // Multipart upload (Buffer from memory storage)
+      projectData.coverImage = await uploadToImageKit(
+        file.buffer,
+        file.originalname,
+        "ovastin/projects"
+      );
+    } else if (projectData.coverImage) {
+      // Base64 data URL from the admin UI is uploaded to ImageKit; plain URLs pass through
+      const uploaded = await uploadImageValue(
+        projectData.coverImage,
+        "ovastin/projects",
+        "project-cover"
+      );
+      if (uploaded) projectData.coverImage = uploaded;
+    }
+
+    return this.projectRepository.create({ ...projectData, slug });
   }
 
   async updateProject(id: string, data: UpdateProjectData) {
@@ -61,7 +81,24 @@ export class ProjectService {
       }
     }
 
-    return this.projectRepository.update(id, data);
+    const { file, ...updateData } = data;
+
+    if (file?.buffer && file.originalname) {
+      updateData.coverImage = await uploadToImageKit(
+        file.buffer,
+        file.originalname,
+        "ovastin/projects"
+      );
+    } else if (updateData.coverImage) {
+      const uploaded = await uploadImageValue(
+        updateData.coverImage,
+        "ovastin/projects",
+        "project-cover"
+      );
+      if (uploaded) updateData.coverImage = uploaded;
+    }
+
+    return this.projectRepository.update(id, updateData);
   }
 
   async deleteProject(id: string) {

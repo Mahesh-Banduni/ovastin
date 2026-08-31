@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type ChangeEvent } from "react";
+import { useRef, useState, useEffect, type ChangeEvent } from "react";
 import {
   ImagePlus,
   X,
@@ -54,13 +54,59 @@ export function ImageUpload({
   const [manualUrl, setManualUrl] = useState("");
   const dragIndex = useRef<number | null>(null);
 
-  // Normalize value to array of strings (URLs or base64 data)
+  const [objectUrls, setObjectUrls] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const newUrls: Record<string, string> = {};
+    const filesToConvert: File[] = [];
+
+    if (value && typeof File !== "undefined" && value instanceof File) {
+      filesToConvert.push(value);
+    } else if (Array.isArray(value)) {
+      value.forEach((item) => {
+        if (item && typeof File !== "undefined" && item instanceof File) {
+          filesToConvert.push(item);
+        }
+      });
+    }
+
+    filesToConvert.forEach((file) => {
+      const key = `${file.name}-${file.size}`;
+      if (objectUrls[key]) {
+        newUrls[key] = objectUrls[key];
+      } else {
+        newUrls[key] = URL.createObjectURL(file);
+      }
+    });
+
+    Object.keys(objectUrls).forEach((key) => {
+      if (!newUrls[key]) {
+        URL.revokeObjectURL(objectUrls[key]);
+      }
+    });
+
+    setObjectUrls(newUrls);
+
+    return () => {
+      Object.values(newUrls).forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [value]);
+
+  // Normalize value to array of strings (URLs or object URLs)
   const normalizedImages: string[] = (() => {
     if (!value) return [];
+    if (typeof File !== "undefined" && value instanceof File) {
+      const key = `${value.name}-${value.size}`;
+      return [objectUrls[key] || ""];
+    }
     if (typeof value === "string") return value.trim() ? [value.trim()] : [];
     if (Array.isArray(value)) {
       return value
         .map((item) => {
+          if (typeof File !== "undefined" && item instanceof File) {
+            const key = `${item.name}-${item.size}`;
+            return objectUrls[key] || "";
+          }
           if (typeof item === "string") return item;
           if (item && typeof item === "object") {
             return item.preview || item.file_url || "";
@@ -81,15 +127,6 @@ export function ImageUpload({
     "image/svg+xml",
   ];
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-      reader.readAsDataURL(file);
-    });
-  };
 
   const handleFiles = async (files: FileList | File[]) => {
     setErrorMessage(null);
@@ -114,33 +151,16 @@ export function ImageUpload({
 
     try {
       if (maxFiles === 1) {
-        const base64 = await fileToBase64(validFiles[0]);
-        if (typeof value === "string" || !value) {
-          onChange(base64);
-        } else if (Array.isArray(value) && typeof value[0] === "object") {
-          const item: ImageItem = {
-            file: validFiles[0],
-            preview: base64,
-            file_url: base64,
-            isNew: true,
-            is_primary: true,
-            image_order: 0,
-          };
-          onChange([item]);
-        } else {
-          onChange([base64]);
-        }
+        onChange(validFiles[0]);
         return;
       }
-
-      const newBase64s = await Promise.all(validFiles.map((f) => fileToBase64(f)));
 
       if (Array.isArray(value) && value.length > 0 && typeof value[0] === "object") {
         const existingItems = (value as ImageItem[]) || [];
         const newItems: ImageItem[] = validFiles.map((file, idx) => ({
           file,
-          preview: newBase64s[idx],
-          file_url: newBase64s[idx],
+          preview: URL.createObjectURL(file),
+          file_url: "",
           isNew: true,
           isExisting: false,
           is_primary: existingItems.length === 0 && idx === 0,
@@ -148,11 +168,11 @@ export function ImageUpload({
         }));
         onChange([...existingItems, ...newItems].slice(0, maxFiles));
       } else {
-        const combined = [...normalizedImages, ...newBase64s].slice(0, maxFiles);
-        onChange(combined);
+        const existing = Array.isArray(value) ? value : [];
+        onChange([...existing, ...validFiles].slice(0, maxFiles));
       }
     } catch {
-      setErrorMessage("Failed to read image file. Please try again.");
+      setErrorMessage("Failed to process image file. Please try again.");
     }
   };
 
@@ -175,7 +195,7 @@ export function ImageUpload({
   const removeImage = (index: number) => {
     setErrorMessage(null);
     if (disabled) return;
-    if (maxFiles === 1 && (typeof value === "string" || !Array.isArray(value))) {
+    if (maxFiles === 1) {
       onChange("");
       return;
     }
@@ -185,11 +205,7 @@ export function ImageUpload({
       onChange(updated);
     } else {
       const updated = normalizedImages.filter((_, i) => i !== index);
-      if (maxFiles === 1 && typeof value === "string") {
-        onChange("");
-      } else {
-        onChange(updated);
-      }
+      onChange(updated);
     }
   };
 
