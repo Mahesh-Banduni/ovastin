@@ -1,9 +1,9 @@
 import { FastifyInstance } from "fastify";
-import multer from "multer";
 
 import container, { TYPES } from "../../container.js";
 import { validateRequest } from "../../middleware/validateRequest.js";
 import { authenticate } from "../../middleware/authenticate.js";
+import { uploadSingle } from "../../middleware/upload.middleware.js";
 import { ProjectController } from "./project.controller.js";
 import {
   createProjectSchema,
@@ -11,8 +11,6 @@ import {
   projectFiltersSchema,
   addImageSchema
 } from "./project.validation.js";
-
-const upload = multer({ storage: multer.memoryStorage() });
 
 export async function projectRoutes(app: FastifyInstance) {
   const controller = container.get<ProjectController>(TYPES.ProjectController);
@@ -30,8 +28,11 @@ export async function projectRoutes(app: FastifyInstance) {
   app.post(
     "/",
     {
-      preHandler: [authenticate as any],
-      preValidation: validateRequest({ body: createProjectSchema })
+      preHandler: [
+        authenticate as any,
+        uploadSingle("coverImage"),
+        validateRequest({ body: createProjectSchema })
+      ]
     },
     controller.create
   );
@@ -39,8 +40,11 @@ export async function projectRoutes(app: FastifyInstance) {
   app.patch(
     "/:id",
     {
-      preHandler: [authenticate as any],
-      preValidation: validateRequest({ body: updateProjectSchema })
+      preHandler: [
+        authenticate as any,
+        uploadSingle("coverImage"),
+        validateRequest({ body: updateProjectSchema })
+      ]
     },
     controller.update
   );
@@ -49,6 +53,14 @@ export async function projectRoutes(app: FastifyInstance) {
     "/:id",
     { preHandler: [authenticate as any] },
     controller.delete
+  );
+
+  app.post(
+    "/:id/images",
+    {
+      preHandler: [authenticate as any, uploadSingle("file")]
+    },
+    controller.uploadImage
   );
 
   app.post(

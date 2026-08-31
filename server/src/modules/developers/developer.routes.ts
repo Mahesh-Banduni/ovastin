@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import container, { TYPES } from "../../container.js";
 import { validateRequest } from "../../middleware/validateRequest.js";
 import { authenticate } from "../../middleware/authenticate.js";
+import { uploadSingle } from "../../middleware/upload.middleware.js";
 import { DeveloperController } from "./developer.controller.js";
 import { createDeveloperSchema, updateDeveloperSchema } from "./developer.validation.js";
 
@@ -13,13 +14,19 @@ export async function developerRoutes(app: FastifyInstance) {
 
   app.post(
     "/",
-    { preHandler: [authenticate as any], preValidation: validateRequest({ body: createDeveloperSchema }) },
+    {
+      preHandler: [authenticate as any, uploadSingle("logo")],
+      preValidation: validateRequest({ body: createDeveloperSchema })
+    },
     controller.create
   );
 
   app.patch(
     "/:id",
-    { preHandler: [authenticate as any], preValidation: validateRequest({ body: updateDeveloperSchema }) },
+    {
+      preHandler: [authenticate as any, uploadSingle("logo")],
+      preValidation: validateRequest({ body: updateDeveloperSchema })
+    },
     controller.update
   );
 

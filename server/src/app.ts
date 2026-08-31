@@ -68,6 +68,11 @@ export async function createApp() {
     contentSecurityPolicy: false
   });
 
+  // Multipart Content Type Parser (allows Multer preHandler to process request stream)
+  app.addContentTypeParser("multipart/form-data", (_request, _payload, done) => {
+    done(null);
+  });
+
 
   // Global Error Handler
 

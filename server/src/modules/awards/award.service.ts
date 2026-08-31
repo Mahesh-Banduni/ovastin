@@ -21,13 +21,21 @@ export class AwardService {
     return award;
   }
 
-  async createAward(data: CreateAwardData) {
-    return this.awardRepository.create(data);
+  async createAward(data: CreateAwardData, file?: any) {
+    const awardData = { ...data };
+    if (file?.buffer && file.originalname) {
+      awardData.imageUrl = await uploadToImageKit(file.buffer, file.originalname, "ovastin/awards");
+    }
+    return this.awardRepository.create(awardData);
   }
 
-  async updateAward(id: string, data: UpdateAwardData) {
+  async updateAward(id: string, data: UpdateAwardData, file?: any) {
     await this.getAward(id);
-    return this.awardRepository.update(id, data);
+    const updateData = { ...data };
+    if (file?.buffer && file.originalname) {
+      updateData.imageUrl = await uploadToImageKit(file.buffer, file.originalname, "ovastin/awards");
+    }
+    return this.awardRepository.update(id, updateData);
   }
 
   async deleteAward(id: string) {

@@ -25,13 +25,15 @@ export class DeveloperController {
   });
 
   create = asyncHandler(async (request, reply) => {
-    const developer = await this.developerService.createDeveloper(request.body as any);
+    const file = (request as any).file;
+    const developer = await this.developerService.createDeveloper(request.body as any, file);
     return reply.status(201).send(new ApiResponse(201, developer, "Developer created"));
   });
 
   update = asyncHandler(async (request, reply) => {
     const { id } = request.params as { id: string };
-    const developer = await this.developerService.updateDeveloper(id, request.body as any);
+    const file = (request as any).file;
+    const developer = await this.developerService.updateDeveloper(id, request.body as any, file);
     return reply.status(200).send(new ApiResponse(200, developer, "Developer updated"));
   });
 

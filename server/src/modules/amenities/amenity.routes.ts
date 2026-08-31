@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import container, { TYPES } from "../../container.js";
 import { validateRequest } from "../../middleware/validateRequest.js";
 import { authenticate } from "../../middleware/authenticate.js";
+import { uploadFields } from "../../middleware/upload.middleware.js";
 import { AmenityController } from "./amenity.controller.js";
 import { createAmenitySchema, updateAmenitySchema } from "./amenity.validation.js";
 
@@ -14,13 +15,25 @@ export async function amenityRoutes(app: FastifyInstance) {
 
   app.post(
     "/",
-    { preHandler: [authenticate as any], preValidation: validateRequest({ body: createAmenitySchema }) },
+    {
+      preHandler: [
+        authenticate as any,
+        uploadFields([{ name: "icon", maxCount: 1 }]),
+        validateRequest({ body: createAmenitySchema })
+      ]
+    },
     controller.create
   );
 
   app.patch(
     "/:id",
-    { preHandler: [authenticate as any], preValidation: validateRequest({ body: updateAmenitySchema }) },
+    {
+      preHandler: [
+        authenticate as any,
+        uploadFields([{ name: "icon", maxCount: 1 }]),
+        validateRequest({ body: updateAmenitySchema })
+      ]
+    },
     controller.update
   );
 

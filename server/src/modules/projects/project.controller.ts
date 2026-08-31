@@ -31,30 +31,32 @@ export class ProjectController {
   create = asyncHandler(async (request, reply) => {
     const body = request.body as any;
     const { amenityIds, ...projectData } = body;
+    const file = (request as any).file;
 
     if (body.possessionDate) {
       projectData.possessionDate = new Date(body.possessionDate);
     }
 
-    const project = await this.projectService.createProject(projectData);
+    const result = await this.projectService.createProject({ ...projectData, file });
 
     if (amenityIds && amenityIds.length > 0) {
-      await this.projectService.setProjectAmenities(project.id, amenityIds);
+      await this.projectService.setProjectAmenities(result.project.id, amenityIds);
     }
 
-    return reply.status(201).send(new ApiResponse(201, project, "Project created"));
+    return reply.status(201).send(new ApiResponse(201, result.project, "Project created"));
   });
 
   update = asyncHandler(async (request, reply) => {
     const { id } = request.params as { id: string };
     const body = request.body as any;
     const { amenityIds, ...updateData } = body;
+    const file = (request as any).file;
 
     if (body.possessionDate) {
       updateData.possessionDate = new Date(body.possessionDate);
     }
 
-    const project = await this.projectService.updateProject(id, updateData);
+    const project = await this.projectService.updateProject(id, { ...updateData, file });
 
     if (amenityIds !== undefined) {
       await this.projectService.setProjectAmenities(id, amenityIds);

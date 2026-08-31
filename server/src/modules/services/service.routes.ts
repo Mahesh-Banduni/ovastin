@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import container, { TYPES } from "../../container.js";
 import { validateRequest } from "../../middleware/validateRequest.js";
 import { authenticate } from "../../middleware/authenticate.js";
+import { uploadFields } from "../../middleware/upload.middleware.js";
 import { ServiceController } from "./service.controller.js";
 import { createServiceSchema, updateServiceSchema } from "./service.validation.js";
 
@@ -13,13 +14,31 @@ export async function serviceRoutes(app: FastifyInstance) {
 
   app.post(
     "/",
-    { preHandler: [authenticate as any], preValidation: validateRequest({ body: createServiceSchema }) },
+    {
+      preHandler: [
+        authenticate as any,
+        uploadFields([
+          { name: "icon", maxCount: 1 },
+          { name: "coverImage", maxCount: 1 }
+        ]),
+        validateRequest({ body: createServiceSchema })
+      ]
+    },
     controller.create
   );
 
   app.patch(
     "/:id",
-    { preHandler: [authenticate as any], preValidation: validateRequest({ body: updateServiceSchema }) },
+    {
+      preHandler: [
+        authenticate as any,
+        uploadFields([
+          { name: "icon", maxCount: 1 },
+          { name: "coverImage", maxCount: 1 }
+        ]),
+        validateRequest({ body: updateServiceSchema })
+      ]
+    },
     controller.update
   );
 
