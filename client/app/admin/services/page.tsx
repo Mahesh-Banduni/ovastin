@@ -112,7 +112,6 @@ export default function AdminServicesPage() {
                 <TableRow>
                   <TableHead>Service Name</TableHead>
                   <TableHead>Slug</TableHead>
-                  <TableHead>Icon / Symbol</TableHead>
                   <TableHead>Order</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
@@ -133,12 +132,6 @@ export default function AdminServicesPage() {
                     <TableCell>
                       <span className="text-[11px] font-mono bg-[var(--surface-hover)] border border-[var(--border)] text-[var(--text-secondary)] px-2 py-1 rounded-lg">
                         /{service.slug}
-                      </span>
-                    </TableCell>
-
-                    <TableCell>
-                      <span className="text-[11px] font-semibold px-2 py-1 rounded-lg border border-[var(--border)] bg-[var(--surface-hover)] text-[var(--text-secondary)]">
-                        {service.icon || "Default"}
                       </span>
                     </TableCell>
 

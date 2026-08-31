@@ -21,7 +21,7 @@ const keyFeatures = {
   ]
 };
 
-export default function Projects(){
+export default function ProjectsSection(){
     return(
         <div className="section-container pt-0 sm:pt-2 pb-scale-md-25 flex items-center justify-center">
             <div className="max-w-[1320px] w-full flex flex-col gap-0">

@@ -9,6 +9,7 @@ import FieldError from "../../ui/store/FieldError";
 import { ServiceItem } from "../../../hooks/useServices";
 import { Loader2 } from "lucide-react";
 import Button from "@/components/ui/store/Button";
+import { ImageUpload } from "../ImageUpload";
 import {
   serviceFormSchema,
   validateForm,
@@ -27,6 +28,7 @@ export default function ServiceForm({ service, onSubmit, onCancel }: ServiceForm
   const [slug, setSlug] = useState(service?.slug || "");
   const [description, setDescription] = useState(service?.description || "");
   const [icon, setIcon] = useState(service?.icon || "");
+  const [coverImage, setCoverImage] = useState(service?.coverImage || "");
   const [sortOrder, setSortOrder] = useState(service?.sortOrder?.toString() || "0");
   const [isActive, setIsActive] = useState(service ? service.isActive : true);
 
@@ -64,6 +66,7 @@ export default function ServiceForm({ service, onSubmit, onCancel }: ServiceForm
       slug,
       description,
       icon,
+      coverImage,
       sortOrder,
       isActive,
     });
@@ -80,6 +83,7 @@ export default function ServiceForm({ service, onSubmit, onCancel }: ServiceForm
         slug: result.data.slug,
         description: result.data.description || undefined,
         icon: result.data.icon || undefined,
+        coverImage: result.data.coverImage || undefined,
         sortOrder:
           result.data.sortOrder === "" ? 0 : parseInt(result.data.sortOrder, 10),
         isActive: result.data.isActive,
@@ -143,22 +147,37 @@ export default function ServiceForm({ service, onSubmit, onCancel }: ServiceForm
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="space-y-3">
         <div className="space-y-1.5">
-          <Label htmlFor="service-icon">Icon Name / Identifier</Label>
-          <Input
-            id="service-icon"
+          <ImageUpload
+            label="Service Icon Image"
             value={icon}
-            aria-invalid={!!fieldErrors.icon}
-            onChange={(e) => {
-              setIcon(e.target.value);
+            onChange={(value) => {
+              setIcon(value || "");
               clearFieldError("icon");
             }}
-            placeholder="e.g. Building, Home, Shield"
+            maxFiles={1}
+            description="Upload the icon graphic used for this service"
           />
           <FieldError message={fieldErrors.icon} />
         </div>
 
+        <div className="space-y-1.5">
+          <ImageUpload
+            label="Service Cover Image"
+            value={coverImage}
+            onChange={(value) => {
+              setCoverImage(value || "");
+              clearFieldError("coverImage");
+            }}
+            maxFiles={1}
+            description="Upload the hero/cover image for this service"
+          />
+          <FieldError message={fieldErrors.coverImage} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <Label htmlFor="service-sort-order">Sort Order</Label>
           <Input

@@ -63,9 +63,16 @@ export function useAmenities(initialPage = 1, initialPageSize = 10) {
   }, [fetchAllAmenities]);
 
   const createAmenity = async (amenityData: any) => {
+    const formData = new FormData();
+    Object.entries(amenityData).forEach(([key, val]) => {
+      if (val !== undefined && val !== null) {
+        formData.append(key, val instanceof File ? val : String(val));
+      }
+    });
+
     const res = await apiFetch("/api/v1/amenities", {
       method: "POST",
-      body: JSON.stringify(amenityData),
+      body: formData,
     });
     await fetchAmenities();
     await fetchAllAmenities();
@@ -73,9 +80,16 @@ export function useAmenities(initialPage = 1, initialPageSize = 10) {
   };
 
   const updateAmenity = async (id: string, amenityData: any) => {
+    const formData = new FormData();
+    Object.entries(amenityData).forEach(([key, val]) => {
+      if (val !== undefined && val !== null) {
+        formData.append(key, val instanceof File ? val : String(val));
+      }
+    });
+
     const res = await apiFetch(`/api/v1/amenities/${id}`, {
       method: "PATCH",
-      body: JSON.stringify(amenityData),
+      body: formData,
     });
     await fetchAmenities();
     await fetchAllAmenities();

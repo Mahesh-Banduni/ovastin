@@ -79,18 +79,40 @@ export function useProjects(initialFilters: ProjectFilters = {}) {
   }, [fetchProjects]);
 
   const createProject = async (projectData: any) => {
+    const formData = new FormData();
+    Object.entries(projectData).forEach(([key, val]) => {
+      if (val !== undefined && val !== null) {
+        if (key === "amenityIds" && Array.isArray(val)) {
+          formData.append(key, JSON.stringify(val));
+        } else {
+          formData.append(key, val instanceof File ? val : String(val));
+        }
+      }
+    });
+
     const res = await apiFetch("/api/v1/projects", {
       method: "POST",
-      body: JSON.stringify(projectData),
+      body: formData,
     });
     await fetchProjects();
     return res.data;
   };
 
   const updateProject = async (id: string, projectData: any) => {
+    const formData = new FormData();
+    Object.entries(projectData).forEach(([key, val]) => {
+      if (val !== undefined && val !== null) {
+        if (key === "amenityIds" && Array.isArray(val)) {
+          formData.append(key, JSON.stringify(val));
+        } else {
+          formData.append(key, val instanceof File ? val : String(val));
+        }
+      }
+    });
+
     const res = await apiFetch(`/api/v1/projects/${id}`, {
       method: "PATCH",
-      body: JSON.stringify(projectData),
+      body: formData,
     });
     await fetchProjects();
     return res.data;
@@ -107,6 +129,20 @@ export function useProjects(initialFilters: ProjectFilters = {}) {
     const res = await apiFetch(`/api/v1/projects/${id}/images/url`, {
       method: "POST",
       body: JSON.stringify(imagePayload),
+    });
+    await fetchProjects();
+    return res.data;
+  };
+
+  const uploadGalleryImage = async (id: string, file: File, altText?: string) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    if (altText) {
+      formData.append("altText", altText);
+    }
+    const res = await apiFetch(`/api/v1/projects/${id}/images`, {
+      method: "POST",
+      body: formData,
     });
     await fetchProjects();
     return res.data;
@@ -133,6 +169,7 @@ export function useProjects(initialFilters: ProjectFilters = {}) {
     updateProject,
     deleteProject,
     addImageUrl,
+    uploadGalleryImage,
     removeImage,
   };
 }

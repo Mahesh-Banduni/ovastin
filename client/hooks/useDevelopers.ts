@@ -50,18 +50,32 @@ export function useDevelopers(initialPage = 1, initialPageSize = 10) {
   }, [fetchDevelopers]);
 
   const createDeveloper = async (devData: any) => {
+    const formData = new FormData();
+    Object.entries(devData).forEach(([key, val]) => {
+      if (val !== undefined && val !== null) {
+        formData.append(key, val instanceof File ? val : String(val));
+      }
+    });
+
     const res = await apiFetch("/api/v1/developers", {
       method: "POST",
-      body: JSON.stringify(devData),
+      body: formData,
     });
     await fetchDevelopers();
     return res.data;
   };
 
   const updateDeveloper = async (id: string, devData: any) => {
+    const formData = new FormData();
+    Object.entries(devData).forEach(([key, val]) => {
+      if (val !== undefined && val !== null) {
+        formData.append(key, val instanceof File ? val : String(val));
+      }
+    });
+
     const res = await apiFetch(`/api/v1/developers/${id}`, {
       method: "PATCH",
-      body: JSON.stringify(devData),
+      body: formData,
     });
     await fetchDevelopers();
     return res.data;

@@ -6,8 +6,9 @@ import Label from "../../ui/store/Label";
 import Textarea from "../../ui/store/TextArea";
 import FieldError from "../../ui/store/FieldError";
 import { AmenityItem } from "../../../hooks/useAmenities";
-import { Loader2, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Button from "@/components/ui/store/Button";
+import { ImageUpload } from "../ImageUpload";
 import {
   amenityFormSchema,
   validateForm,
@@ -134,16 +135,15 @@ export default function AmenityForm({ amenity, onSubmit, onCancel }: AmenityForm
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="amenity-icon">Icon / Identifier</Label>
-        <Input
-          id="amenity-icon"
+        <ImageUpload
+          label="Amenity Image"
           value={icon}
-          aria-invalid={!!fieldErrors.icon}
-          onChange={(e) => {
-            setIcon(e.target.value);
+          onChange={(value) => {
+            setIcon(value || "");
             clearFieldError("icon");
           }}
-          placeholder="e.g. Pool, Waves, Dumbbell, Shield, Parking"
+          maxFiles={1}
+          description="Upload the photo/image for this amenity"
         />
         <FieldError message={fieldErrors.icon} />
       </div>

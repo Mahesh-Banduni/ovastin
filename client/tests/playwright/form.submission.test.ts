@@ -4,7 +4,7 @@ test.setTimeout(5 * 60 * 1000); // 5 minutes
 
 test('fill create project form - 10 projects', async ({ page }) => {
     // Navigate to admin login page
-    await page.goto(`http://localhost:3000/signin`);
+    await page.goto(`https://ovastin.vercel.app/signin`);
 
     // Optional: Add a small delay between submissions
     await page.waitForTimeout(3000);
@@ -27,7 +27,7 @@ test('fill create project form - 10 projects', async ({ page }) => {
     await page.getByLabel(/Password/).fill('Mahesh@7906');
 
     // Click sign in button
-    await page.getByRole('button', { name: 'Sign In to Dashboard' }).click();
+        await page.getByRole('button', { name: 'Sign In to Dashboard' }).click();
 
     // Wait for navigation to dashboard
     await page.waitForURL(/\/admin\/projects/);
@@ -35,129 +35,129 @@ test('fill create project form - 10 projects', async ({ page }) => {
     // Verify successful login - should be on projects
     await expect(page).toHaveURL(/\/admin\/projects/);  
 
-  // Define 10 different projects with unique data
-  const projects = [
-    {
-      name: 'Skyline Residences',
-      slug: 'skyline-residences',
-      developer: 'Skyline Developers Pvt Ltd',
-      city: 'Mumbai',
-      state: 'Maharashtra',
-      postalCode: '400001',
-      minPrice: '5000000',
-      maxPrice: '15000000',
-      address: 'Plot 42, Palm Beach Road, Navi Mumbai',
-      description: 'Luxury 2BHK and 3BHK apartments with modern amenities.'
-    },
-    {
-      name: 'Green Valley Apartments',
-      slug: 'green-valley-apartments',
-      developer: 'Green Valley Builders',
-      city: 'Pune',
-      state: 'Maharashtra',
-      postalCode: '411001',
-      minPrice: '4500000',
-      maxPrice: '12000000',
-      address: 'Survey No 15, Hinjewadi Phase 2',
-      description: 'Eco-friendly homes with solar panels and rainwater harvesting.'
-    },
-    {
-      name: 'Ocean View Towers',
-      slug: 'ocean-view-towers',
-      developer: 'Coastal Properties Ltd',
-      city: 'Goa',
-      state: 'Goa',
-      postalCode: '403001',
-      minPrice: '8000000',
-      maxPrice: '25000000',
-      address: 'Candolim Beach Road',
-      description: 'Beachfront luxury apartments with stunning sea views.'
-    },
-    {
-      name: 'Urban Heights',
-      slug: 'urban-heights',
-      developer: 'Metro Developers',
-      city: 'Bangalore',
-      state: 'Karnataka',
-      postalCode: '560001',
-      minPrice: '6000000',
-      maxPrice: '18000000',
-      address: 'MG Road, Central Bangalore',
-      description: 'Modern living in the heart of the city with smart home features.'
-    },
-    {
-      name: 'Sunset Villas',
-      slug: 'sunset-villas',
-      developer: 'Premium Homes Inc',
-      city: 'Hyderabad',
-      state: 'Telangana',
-      postalCode: '500001',
-      minPrice: '7500000',
-      maxPrice: '22000000',
-      address: 'Jubilee Hills, Road No 45',
-      description: 'Exclusive villas with private gardens and clubhouse access.'
-    },
-    {
-      name: 'Parkside Enclave',
-      slug: 'parkside-enclave',
-      developer: 'Nature Living Developers',
-      city: 'Delhi',
-      state: 'Delhi',
-      postalCode: '110001',
-      minPrice: '9000000',
-      maxPrice: '30000000',
-      address: 'Vasant Vihar, Near Deer Park',
-      description: 'Premium apartments overlooking the green park.'
-    },
-    {
-      name: 'Riverfront Residency',
-      slug: 'riverfront-residency',
-      developer: 'Waterside Properties',
-      city: 'Ahmedabad',
-      state: 'Gujarat',
-      postalCode: '380001',
-      minPrice: '4000000',
-      maxPrice: '11000000',
-      address: 'SG Highway, Near Sabarmati River',
-      description: 'Affordable luxury with river views and modern amenities.'
-    },
-    {
-      name: 'Hill Crest Apartments',
-      slug: 'hill-crest-apartments',
-      developer: 'Mountain View Builders',
-      city: 'Shimla',
-      state: 'Himachal Pradesh',
-      postalCode: '171001',
-      minPrice: '5500000',
-      maxPrice: '16000000',
-      address: 'Mall Road, Near Ridge',
-      description: 'Mountain view apartments with heating and modern facilities.'
-    },
-    {
-      name: 'Tech Park Residences',
-      slug: 'tech-park-residences',
-      developer: 'IT Corridor Developers',
-      city: 'Chennai',
-      state: 'Tamil Nadu',
-      postalCode: '600001',
-      minPrice: '5000000',
-      maxPrice: '14000000',
-      address: 'OMR, Near Tidel Park',
-      description: 'Perfect for IT professionals with shuttle service and gym.'
-    },
-    {
-      name: 'Royal Palms Estate',
-      slug: 'royal-palms-estate',
-      developer: 'Luxury Living Group',
-      city: 'Jaipur',
-      state: 'Rajasthan',
-      postalCode: '302001',
-      minPrice: '6500000',
-      maxPrice: '20000000',
-      address: 'Malviya Nagar, Near Jawahar Circle',
-      description: 'Royal living with traditional architecture and modern comforts.'
-    }
-  ];
+    // Define 10 different projects with unique data
+    const projects = [
+      {
+        name: 'Aura Skyline Residences',
+        slug: 'aura-skyline-residences',
+        developer: 'Aura Skyline Developers LLC',
+        city: 'New York',
+        state: 'New York',
+        postalCode: '10001',
+        minPrice: '550000',
+        maxPrice: '1850000',
+        address: '42 Park Avenue, Midtown Manhattan',
+        description: 'Luxury 2BR and 3BR condos with rooftop lounge and concierge services.'
+      },
+      {
+        name: 'Green Valley Estates',
+        slug: 'green-valley-estates',
+        developer: 'Green Valley Builders Inc',
+        city: 'Austin',
+        state: 'Texas',
+        postalCode: '78701',
+        minPrice: '420000',
+        maxPrice: '1200000',
+        address: '1500 Barton Springs Road',
+        description: 'Eco-friendly homes with solar panels, EV chargers, and community gardens.'
+      },
+      {
+        name: 'Ocean View Towers',
+        slug: 'ocean-view-towers',
+        developer: 'Coastal Properties Group',
+        city: 'Miami',
+        state: 'Florida',
+        postalCode: '33139',
+        minPrice: '890000',
+        maxPrice: '2800000',
+        address: '1 Ocean Drive, South Beach',
+        description: 'Beachfront luxury condos with panoramic ocean views and resort-style pools.'
+      },
+      {
+        name: 'Urban Heights',
+        slug: 'urban-heights',
+        developer: 'Metro Development Partners',
+        city: 'Chicago',
+        state: 'Illinois',
+        postalCode: '60601',
+        minPrice: '480000',
+        maxPrice: '1600000',
+        address: '200 Michigan Avenue, The Loop',
+        description: 'Modern high-rise living with smart home tech and city skyline views.'
+      },
+      {
+        name: 'Sunset Villas',
+        slug: 'sunset-villas',
+        developer: 'Premium Homes Group',
+        city: 'Los Angeles',
+        state: 'California',
+        postalCode: '90001',
+        minPrice: '750000',
+        maxPrice: '2400000',
+        address: '8450 Sunset Boulevard, Hollywood Hills',
+        description: 'Private gated villas with infinity pools and panoramic LA views.'
+      },
+      {
+        name: 'Parkside Enclave',
+        slug: 'parkside-enclave',
+        developer: 'Nature Living Realty',
+        city: 'Washington',
+        state: 'District of Columbia',
+        postalCode: '20001',
+        minPrice: '920000',
+        maxPrice: '3100000',
+        address: '1100 Pennsylvania Avenue NW',
+        description: 'Premier residences overlooking the National Mall with secure parking.'
+      },
+      {
+        name: 'Riverfront Residency',
+        slug: 'riverfront-residency',
+        developer: 'Waterside Properties LLC',
+        city: 'Portland',
+        state: 'Oregon',
+        postalCode: '97201',
+        minPrice: '380000',
+        maxPrice: '1050000',
+        address: '1315 SW Park Avenue, Downtown',
+        description: 'Affordable luxury with river views, bike storage, and fitness center.'
+      },
+      {
+        name: 'Hill Crest Apartments',
+        slug: 'hill-crest-apartments',
+        developer: 'Mountain View Builders',
+        city: 'Denver',
+        state: 'Colorado',
+        postalCode: '80202',
+        minPrice: '520000',
+        maxPrice: '1650000',
+        address: '1600 California Street, LoDo',
+        description: 'Mountain-view apartments with heated garages and modern finishes.'
+      },
+      {
+        name: 'Tech Park Residences',
+        slug: 'tech-park-residences',
+        developer: 'Silicon Valley Developers',
+        city: 'San Jose',
+        state: 'California',
+        postalCode: '95101',
+        minPrice: '510000',
+        maxPrice: '1450000',
+        address: '1 Infinite Loop, Cupertino',
+        description: 'Ideal for tech professionals — high-speed fiber, co-working space, and gym.'
+      },
+      {
+        name: 'Royal Palms Estate',
+        slug: 'royal-palms-estate',
+        developer: 'Luxury Living Group',
+        city: 'Scottsdale',
+        state: 'Arizona',
+        postalCode: '85251',
+        minPrice: '680000',
+        maxPrice: '2200000',
+        address: '6900 E Camelback Road, Old Town',
+        description: 'Mediterranean-style villas with private courtyards and resort amenities.'
+      }
+    ];
 
   // Verify we are on the Projects page
   await expect(
